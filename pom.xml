@@ -46,6 +46,19 @@
       <version>1.10.1.RELEASE</version>
     </dependency>
 
+    <!--hibernate部分-->
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>${hibernate.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-ehcache</artifactId>
+      <version>${hibernate.version}</version>
+    </dependency>
+
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-entitymanager</artifactId>
@@ -116,8 +129,6 @@
       <artifactId>commons-io</artifactId>
       <version>2.5</version>
     </dependency>
-
-
 
   </dependencies>
   <build>

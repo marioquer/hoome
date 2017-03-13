@@ -6,6 +6,16 @@
 
   <display-name>hoome</display-name>
 
+  <!--spring部分-->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>WEB-INF/applicationContext.xml</param-value>
+  </context-param>
+
+  <!--spring MVC部分-->
   <servlet>
     <servlet-name>mvc-dispatcher</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -17,6 +27,7 @@
     <url-pattern>/</url-pattern>
   </servlet-mapping>
 
+  <!--消除中文乱码部分-->
   <filter>
     <filter-name>encodingFilter</filter-name>
     <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -33,10 +44,5 @@
     <filter-name>encodingFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-
-  <mime-mapping>
-    <extension>vtt</extension>
-    <mime-type>text/vtt</mime-type>
-  </mime-mapping>
 
 </web-app>
