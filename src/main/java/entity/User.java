@@ -9,7 +9,9 @@ import javax.persistence.Table;
  * Created by marioquer on 2017/3/13.
  */
 @Entity
+@Table(name="user")
 public class User {
+    @Id
     private int id;
     private String phone;
     private String name;
@@ -17,8 +19,6 @@ public class User {
     private String username;
     private int role;
 
-    @Id
-    @Column
     public int getId() {
         return id;
     }
