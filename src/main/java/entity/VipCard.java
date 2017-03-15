@@ -15,11 +15,11 @@ public class VipCard {
     private Integer id;
     private Integer user_id;
     private Double blance;
-    private Integer level;
+    private Integer level;//0普通会员，1银卡，2金卡
     private Integer point;
     private Date created_at;
     private Date expired_at;
-    private Integer status;
+    private Integer status;//1未激活，2正常，-1被取消，0暂停
 
     public Integer getId() {
         return id;

@@ -35,6 +35,4 @@ public class HibernateUtil {
         }
         threadLocal.set(null);
     }
-
-
 }

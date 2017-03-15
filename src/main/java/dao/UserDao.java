@@ -7,4 +7,5 @@ import entity.User;
  */
 public interface UserDao {
     User getUser(Integer id);
+    User getUser(String phone);
 }

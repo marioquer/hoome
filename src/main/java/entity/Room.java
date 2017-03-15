@@ -11,7 +11,7 @@ import java.util.Date;
 @Table(name = "room")
 public class Room {
     private Integer hotel_id;
-    private Integer room_style;
+    private Integer room_style;//0单人房，1双人房
     private Integer remain;
     private Double price;
     private Double special_price;

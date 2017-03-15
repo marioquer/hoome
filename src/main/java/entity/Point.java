@@ -14,7 +14,7 @@ public class Point {
     @Id
     private Integer id;
     private Integer vip_id;
-    private Integer type;
+    private Integer type;//0消费，1兑换
     private Integer point;
     private Double balance;
     private Date time;

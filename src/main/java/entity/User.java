@@ -12,18 +12,17 @@ import javax.persistence.Table;
 @Table(name="user")
 public class User {
     @Id
-    private int id;
+    private Integer id;
     private String phone;
     private String name;
     private String password;
-    private String username;
-    private int role;
+    private Integer role;//0普通用户，1店主，2经理
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -51,19 +50,11 @@ public class User {
         this.password = password;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public int getRole() {
+    public Integer getRole() {
         return role;
     }
 
-    public void setRole(int role) {
+    public void setRole(Integer role) {
         this.role = role;
     }
 }

@@ -20,8 +20,8 @@ public class Apply {
     private Integer owner_id;
     private String introduction;
     private Date apply_time;
-    private Integer type;
-    private Integer status;
+    private Integer type;//0创建客栈，1修改信息
+    private Integer status;//0未通过，1通过
 
     public Integer getId() {
         return id;

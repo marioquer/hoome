@@ -11,7 +11,7 @@ import javax.persistence.Table;
 public class RoomCustomer {
     private Integer record_id;
     private String name;
-    private Integer gender;
+    private Integer gender;//0女，1男
     private String identity_id;
 
     public Integer getRecord_id() {

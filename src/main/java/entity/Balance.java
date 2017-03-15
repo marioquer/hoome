@@ -14,7 +14,7 @@ public class Balance {
     @Id
     private Integer id;
     private Integer vip_id;
-    private Integer type;
+    private Integer type;//0消费，1充值
     private Double money;
     private Double balance;
     private Date time;

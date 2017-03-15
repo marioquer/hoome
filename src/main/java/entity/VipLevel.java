@@ -9,7 +9,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "vip_level")
 public class VipLevel {
-    private Integer level;
+    private Integer level;//0普通会员，1银卡，2金卡
     private Double discount;
     private Double point_level;
     private Double require;

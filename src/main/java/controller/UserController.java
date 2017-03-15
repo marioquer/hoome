@@ -20,11 +20,20 @@ public class UserController {
 
     @RequestMapping(value = "/getUser", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String,Object> getUser(int id){
+    public Map<String,Object> getUser(Integer id){
         Map<String, Object> userJson = new HashMap<String, Object>();
         userJson.put("state","success");
         userJson.put("data",userService.getUser(id));
         return userJson;
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @ResponseBody
+    public String login(Integer phone, String password){
+
+
+
+        return "";
     }
 
 }

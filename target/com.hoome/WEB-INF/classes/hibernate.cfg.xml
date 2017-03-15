@@ -11,7 +11,16 @@
         <property name="hibernate.search.autoregister_listeners">false</property>
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password">Qq6655355</property>
+        <mapping class="entity.Apply"/>
+        <mapping class="entity.Balance"/>
+        <mapping class="entity.BankCard"/>
+        <mapping class="entity.BookRecord"/>
+        <mapping class="entity.Hotel"/>
+        <mapping class="entity.Point"/>
+        <mapping class="entity.Room"/>
+        <mapping class="entity.RoomCustomer"/>
         <mapping class="entity.User"/>
-
+        <mapping class="entity.VipCard"/>
+        <mapping class="entity.VipLevel"/>
     </session-factory>
 </hibernate-configuration>

@@ -17,12 +17,12 @@ public class BookRecord {
     private Double discount;
     private Double amount;
     private Integer hotel_id;
-    private Integer room_style;
-    private Integer status;
+    private Integer room_style;//0单人房，1双人房
+    private Integer status;//0已预订，1已入住，2已退房，-1已取消
     private Date book_time;
     private Date in_time;
     private Date out_time;
-    private Integer pay_method;
+    private Integer pay_method;//0现金，1会员卡支付
 
     public Integer getId() {
         return id;
