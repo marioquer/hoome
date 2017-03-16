@@ -83,22 +83,38 @@ public class MainController {
         return mv;
     }
 
-    /*
-    * manager view
-    * */
-    @RequestMapping(value = "/manager/apply", method = RequestMethod.GET)
+    @RequestMapping(value = "/landlord/special", method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView managerApply(){
+    public ModelAndView landlordSpecial(){
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("manager/apply");
+        mv.setViewName("landlord/special");
         return mv;
     }
 
-    @RequestMapping(value = "/manager/statistics", method = RequestMethod.GET)
+    /*
+    * boss view
+    * */
+    @RequestMapping(value = "/boss/apply", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView managerApply(){
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("boss/apply");
+        return mv;
+    }
+
+    @RequestMapping(value = "/boss/pay", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView managerPay(){
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("boss/pay");
+        return mv;
+    }
+
+    @RequestMapping(value = "/boss/statistics", method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView managerStatistics(){
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("manager/statistics");
+        mv.setViewName("boss/statistics");
         return mv;
     }
 

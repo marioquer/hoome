@@ -1,69 +1,121 @@
 package entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.util.Date;
+import javax.persistence.*;
+import java.sql.Timestamp;
 
 /**
- * Created by marioquer on 2017/3/14.
+ * Created by marioquer on 2017/3/15.
  */
 @Entity
-@Table(name = "balance")
 public class Balance {
-    @Id
-    private Integer id;
-    private Integer vip_id;
-    private Integer type;//0消费，1充值
-    private Double money;
-    private Double balance;
-    private Date time;
+    private int id;
+    private int vipId;
+    private byte type;
+    private double money;
+    private double balance;
+    private Timestamp time;
+    private VipCard vipCardByVipId;
 
-    public Integer getId() {
+    @Id
+    @Column(name = "id", nullable = false)
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public Integer getVip_id() {
-        return vip_id;
+    @Basic
+    @Column(name = "vip_id", nullable = false)
+    public int getVipId() {
+        return vipId;
     }
 
-    public void setVip_id(Integer vip_id) {
-        this.vip_id = vip_id;
+    public void setVipId(int vipId) {
+        this.vipId = vipId;
     }
 
-    public Integer getType() {
+    @Basic
+    @Column(name = "type", nullable = false)
+    public byte getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(byte type) {
         this.type = type;
     }
 
-    public Double getMoney() {
+    @Basic
+    @Column(name = "money", nullable = false, precision = 0)
+    public double getMoney() {
         return money;
     }
 
-    public void setMoney(Double money) {
+    public void setMoney(double money) {
         this.money = money;
     }
 
-    public Double getBalance() {
+    @Basic
+    @Column(name = "balance", nullable = false, precision = 0)
+    public double getBalance() {
         return balance;
     }
 
-    public void setBalance(Double balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 
-    public Date getTime() {
+    @Basic
+    @Column(name = "time", nullable = false)
+    public Timestamp getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(Timestamp time) {
         this.time = time;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Balance balance1 = (Balance) o;
+
+        if (id != balance1.id) return false;
+        if (vipId != balance1.vipId) return false;
+        if (type != balance1.type) return false;
+        if (Double.compare(balance1.money, money) != 0) return false;
+        if (Double.compare(balance1.balance, balance) != 0) return false;
+        if (time != null ? !time.equals(balance1.time) : balance1.time != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = id;
+        result = 31 * result + vipId;
+        result = 31 * result + (int) type;
+        temp = Double.doubleToLongBits(money);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(balance);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (time != null ? time.hashCode() : 0);
+        return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "vip_id", referencedColumnName = "id", nullable = false,insertable = false, updatable = false
+    )
+    public VipCard getVipCardByVipId() {
+        return vipCardByVipId;
+    }
+
+    public void setVipCardByVipId(VipCard vipCardByVipId) {
+        this.vipCardByVipId = vipCardByVipId;
     }
 }

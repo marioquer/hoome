@@ -4,8 +4,9 @@ import dao.UserDao;
 import entity.User;
 import helper.HibernateUtil;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,12 +24,20 @@ public class UserDaoImpl implements UserDao {
         try {
             session = HibernateUtil.currentSession();
             criteria = session.createCriteria(entity.User.class);
-            criteria.add(Expression.eq("id",id));
-            List list = criteria.list();
-            User user = (User)list.get(0);
-            return user;
+            criteria.add(Restrictions.eq("id",id));
+            List<User> list = criteria.list();
+
+            if(list.size()==0){
+                System.out.println("aaa");
+                return null;
+            }else{
+                User user = list.get(0);
+                HibernateUtil.closeSession();
+                return user;
+            }
         }catch (Exception e) {
             e.printStackTrace();
+            HibernateUtil.closeSession();
             return null;
         }
     }
@@ -38,12 +47,20 @@ public class UserDaoImpl implements UserDao {
         try {
             session = HibernateUtil.currentSession();
             criteria = session.createCriteria(entity.User.class);
-            criteria.add(Expression.eq("phone",phone));
-            List list = criteria.list();
-            User user = (User)list.get(0);
-            return user;
+            criteria.add(Restrictions.eq("phone",phone));
+            List<User> list = criteria.list();
+
+            if(list.size()==0){
+                System.out.println("aaa");
+                return null;
+            }else{
+                User user = list.get(0);
+                HibernateUtil.closeSession();
+                return user;
+            }
         }catch (Exception e) {
             e.printStackTrace();
+            HibernateUtil.closeSession();
             return null;
         }
     }

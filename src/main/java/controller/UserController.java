@@ -13,6 +13,7 @@ import java.util.Map;
  * Created by marioquer on 2017/3/13.
  */
 @Controller
+@RequestMapping(value = "/user")
 public class UserController {
 
     @Autowired
@@ -29,11 +30,12 @@ public class UserController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public String login(Integer phone, String password){
-
-
-
-        return "";
+    public String login(String phone, String password){
+        boolean result = userService.login(phone,password);
+        if (result)
+            return "success";
+        else
+            return "fail";
     }
 
 }

@@ -8,6 +8,8 @@ import org.hibernate.cfg.Configuration;
  * Created by marioquer on 2017/3/14.
  */
 public class HibernateUtil {
+    public HibernateUtil() {
+    }
     private static final SessionFactory sessionFactory;
     static {
         try {

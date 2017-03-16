@@ -42,11 +42,6 @@
         }
     </style>
 </head>
-
-<?php
-$user = Session::get('user');
-?>
-
 <body>
 <nav class="white" role="navigation">
     <div class="nav-wrapper container">
@@ -240,21 +235,21 @@ $user = Session::get('user');
     }
 
     function login() {
-        var username = $("#first_name").val();
+        var phone = $("#phone").val();
         var password = $("#password").val();
 
         $.ajax({
             method: "post",
-            url: "user/login",
+            url: "/user/login",
             async: false,
             data: {
-                "username": username,
+                "phone": phone,
                 "password": password
             },
             success: function (result) {
                 if (result == "success") {
                     Materialize.toast('登录成功!', 1200);
-                    window.location.href = "index";
+                    //window.location.href = "index";
                 } else {
                     Materialize.toast('登录失败!', 1200);
                 }
@@ -266,18 +261,18 @@ $user = Session::get('user');
     }
 
     function logup() {
-        var username = $("#new_first_name").val();
+        var phone = $("#new_phone").val();
         var password = $("#new_password").val();
-        var sex = $("#sex").val();
+        var role = $("#new_role").val();
 
         $.ajax({
             method: "post",
-            url: "user/logup",
+            url: "/user/logup",
             async: false,
             data: {
-                "username": username,
+                "phone": username,
                 "password": password,
-                "sex": sex
+                "role": role
             },
             success: function (result) {
                 if (result == "success") {

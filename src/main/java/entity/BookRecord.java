@@ -1,115 +1,208 @@
 package entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.util.Date;
+import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.Collection;
 
 /**
- * Created by marioquer on 2017/3/14.
+ * Created by marioquer on 2017/3/15.
  */
 @Entity
-@Table(name = "book_record")
+@Table(name = "book_record", schema = "hoome", catalog = "")
 public class BookRecord {
-    @Id
-    private Integer id;
-    private Integer booker_id;
-    private Double discount;
-    private Double amount;
-    private Integer hotel_id;
-    private Integer room_style;//0单人房，1双人房
-    private Integer status;//0已预订，1已入住，2已退房，-1已取消
-    private Date book_time;
-    private Date in_time;
-    private Date out_time;
-    private Integer pay_method;//0现金，1会员卡支付
+    private long id;
+    private int bookerId;
+    private double discount;
+    private double amount;
+    private int hotelId;
+    private byte roomStyle;
+    private byte status;
+    private Timestamp bookTime;
+    private Timestamp inTime;
+    private Timestamp outTime;
+    private Byte payMethod;
+    private User userByBookerId;
+    private Hotel hotelByHotelId;
+    private Collection<RoomCustomer> roomCustomersById;
 
-    public Integer getId() {
+    @Id
+    @Column(name = "id", nullable = false)
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public Integer getBooker_id() {
-        return booker_id;
+    @Basic
+    @Column(name = "booker_id", nullable = false)
+    public int getBookerId() {
+        return bookerId;
     }
 
-    public void setBooker_id(Integer booker_id) {
-        this.booker_id = booker_id;
+    public void setBookerId(int bookerId) {
+        this.bookerId = bookerId;
     }
 
-    public Double getDiscount() {
+    @Basic
+    @Column(name = "discount", nullable = false, precision = 0)
+    public double getDiscount() {
         return discount;
     }
 
-    public void setDiscount(Double discount) {
+    public void setDiscount(double discount) {
         this.discount = discount;
     }
 
-    public Double getAmount() {
+    @Basic
+    @Column(name = "amount", nullable = false, precision = 0)
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
-    public Integer getHotel_id() {
-        return hotel_id;
+    @Basic
+    @Column(name = "hotel_id", nullable = false)
+    public int getHotelId() {
+        return hotelId;
     }
 
-    public void setHotel_id(Integer hotel_id) {
-        this.hotel_id = hotel_id;
+    public void setHotelId(int hotelId) {
+        this.hotelId = hotelId;
     }
 
-    public Integer getRoom_style() {
-        return room_style;
+    @Basic
+    @Column(name = "room_style", nullable = false)
+    public byte getRoomStyle() {
+        return roomStyle;
     }
 
-    public void setRoom_style(Integer room_style) {
-        this.room_style = room_style;
+    public void setRoomStyle(byte roomStyle) {
+        this.roomStyle = roomStyle;
     }
 
-    public Integer getStatus() {
+    @Basic
+    @Column(name = "status", nullable = false)
+    public byte getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(byte status) {
         this.status = status;
     }
 
-    public Date getBook_time() {
-        return book_time;
+    @Basic
+    @Column(name = "book_time", nullable = false)
+    public Timestamp getBookTime() {
+        return bookTime;
     }
 
-    public void setBook_time(Date book_time) {
-        this.book_time = book_time;
+    public void setBookTime(Timestamp bookTime) {
+        this.bookTime = bookTime;
     }
 
-    public Date getIn_time() {
-        return in_time;
+    @Basic
+    @Column(name = "in_time", nullable = true)
+    public Timestamp getInTime() {
+        return inTime;
     }
 
-    public void setIn_time(Date in_time) {
-        this.in_time = in_time;
+    public void setInTime(Timestamp inTime) {
+        this.inTime = inTime;
     }
 
-    public Date getOut_time() {
-        return out_time;
+    @Basic
+    @Column(name = "out_time", nullable = true)
+    public Timestamp getOutTime() {
+        return outTime;
     }
 
-    public void setOut_time(Date out_time) {
-        this.out_time = out_time;
+    public void setOutTime(Timestamp outTime) {
+        this.outTime = outTime;
     }
 
-    public Integer getPay_method() {
-        return pay_method;
+    @Basic
+    @Column(name = "pay_method", nullable = true)
+    public Byte getPayMethod() {
+        return payMethod;
     }
 
-    public void setPay_method(Integer pay_method) {
-        this.pay_method = pay_method;
+    public void setPayMethod(Byte payMethod) {
+        this.payMethod = payMethod;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BookRecord that = (BookRecord) o;
+
+        if (id != that.id) return false;
+        if (bookerId != that.bookerId) return false;
+        if (Double.compare(that.discount, discount) != 0) return false;
+        if (Double.compare(that.amount, amount) != 0) return false;
+        if (hotelId != that.hotelId) return false;
+        if (roomStyle != that.roomStyle) return false;
+        if (status != that.status) return false;
+        if (bookTime != null ? !bookTime.equals(that.bookTime) : that.bookTime != null) return false;
+        if (inTime != null ? !inTime.equals(that.inTime) : that.inTime != null) return false;
+        if (outTime != null ? !outTime.equals(that.outTime) : that.outTime != null) return false;
+        if (payMethod != null ? !payMethod.equals(that.payMethod) : that.payMethod != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = (int) (id ^ (id >>> 32));
+        result = 31 * result + bookerId;
+        temp = Double.doubleToLongBits(discount);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(amount);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + hotelId;
+        result = 31 * result + (int) roomStyle;
+        result = 31 * result + (int) status;
+        result = 31 * result + (bookTime != null ? bookTime.hashCode() : 0);
+        result = 31 * result + (inTime != null ? inTime.hashCode() : 0);
+        result = 31 * result + (outTime != null ? outTime.hashCode() : 0);
+        result = 31 * result + (payMethod != null ? payMethod.hashCode() : 0);
+        return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "booker_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    public User getUserByBookerId() {
+        return userByBookerId;
+    }
+
+    public void setUserByBookerId(User userByBookerId) {
+        this.userByBookerId = userByBookerId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "hotel_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    public Hotel getHotelByHotelId() {
+        return hotelByHotelId;
+    }
+
+    public void setHotelByHotelId(Hotel hotelByHotelId) {
+        this.hotelByHotelId = hotelByHotelId;
+    }
+
+    @OneToMany(mappedBy = "bookRecordByRecordId")
+    public Collection<RoomCustomer> getRoomCustomersById() {
+        return roomCustomersById;
+    }
+
+    public void setRoomCustomersById(Collection<RoomCustomer> roomCustomersById) {
+        this.roomCustomersById = roomCustomersById;
     }
 }
-

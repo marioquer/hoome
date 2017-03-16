@@ -1,67 +1,131 @@
 package entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.util.Date;
+import javax.persistence.*;
+import java.sql.Timestamp;
 
 /**
- * Created by marioquer on 2017/3/14.
+ * Created by marioquer on 2017/3/15.
  */
 @Entity
-@Table(name = "room")
+@Table(name = "room", schema = "hoome", catalog = "")
 public class Room {
-    private Integer hotel_id;
-    private Integer room_style;//0单人房，1双人房
-    private Integer remain;
-    private Double price;
-    private Double special_price;
-    private Date special_time;
+    private int id;
+    private int hotelId;
+    private byte roomStyle;
+    private int remain;
+    private double price;
+    private Double specialPrice;
+    private Timestamp specialTime;
+    private Hotel hotelByHotelId;
 
-    public Integer getHotel_id() {
-        return hotel_id;
+    @Id
+    @Column(name = "id", nullable = false)
+    public int getId() {
+        return id;
     }
 
-    public void setHotel_id(Integer hotel_id) {
-        this.hotel_id = hotel_id;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public Integer getRoom_style() {
-        return room_style;
+    @Basic
+    @Column(name = "hotel_id", nullable = false)
+    public int getHotelId() {
+        return hotelId;
     }
 
-    public void setRoom_style(Integer room_style) {
-        this.room_style = room_style;
+    public void setHotelId(int hotelId) {
+        this.hotelId = hotelId;
     }
 
-    public Integer getRemain() {
+    @Basic
+    @Column(name = "room_style", nullable = false)
+    public byte getRoomStyle() {
+        return roomStyle;
+    }
+
+    public void setRoomStyle(byte roomStyle) {
+        this.roomStyle = roomStyle;
+    }
+
+    @Basic
+    @Column(name = "remain", nullable = false)
+    public int getRemain() {
         return remain;
     }
 
-    public void setRemain(Integer remain) {
+    public void setRemain(int remain) {
         this.remain = remain;
     }
 
-    public Double getPrice() {
+    @Basic
+    @Column(name = "price", nullable = false, precision = 0)
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public Double getSpecial_price() {
-        return special_price;
+    @Basic
+    @Column(name = "special_price", nullable = true, precision = 0)
+    public Double getSpecialPrice() {
+        return specialPrice;
     }
 
-    public void setSpecial_price(Double special_price) {
-        this.special_price = special_price;
+    public void setSpecialPrice(Double specialPrice) {
+        this.specialPrice = specialPrice;
     }
 
-    public Date getSpecial_time() {
-        return special_time;
+    @Basic
+    @Column(name = "special_time", nullable = true)
+    public Timestamp getSpecialTime() {
+        return specialTime;
     }
 
-    public void setSpecial_time(Date special_time) {
-        this.special_time = special_time;
+    public void setSpecialTime(Timestamp specialTime) {
+        this.specialTime = specialTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Room room = (Room) o;
+
+        if (hotelId != room.hotelId) return false;
+        if (roomStyle != room.roomStyle) return false;
+        if (remain != room.remain) return false;
+        if (Double.compare(room.price, price) != 0) return false;
+        if (specialPrice != null ? !specialPrice.equals(room.specialPrice) : room.specialPrice != null) return false;
+        if (specialTime != null ? !specialTime.equals(room.specialTime) : room.specialTime != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = hotelId;
+        result = 31 * result + (int) roomStyle;
+        result = 31 * result + remain;
+        temp = Double.doubleToLongBits(price);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (specialPrice != null ? specialPrice.hashCode() : 0);
+        result = 31 * result + (specialTime != null ? specialTime.hashCode() : 0);
+        return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "hotel_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    public Hotel getHotelByHotelId() {
+        return hotelByHotelId;
+    }
+
+    public void setHotelByHotelId(Hotel hotelByHotelId) {
+        this.hotelByHotelId = hotelByHotelId;
     }
 }

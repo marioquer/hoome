@@ -10,13 +10,22 @@ import service.UserService;
  * Created by marioquer on 2017/3/13.
  */
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     @Autowired
     UserDao userDao;
 
     @Override
-    public User getUser(String phone) {
-        return userDao.getUser(phone);
+    public boolean login(String phone, String password) {
+        User user = userDao.getUser(phone);
+        if (user == null) {
+            return false;
+        } else {
+            if (user.getPassword().equals(password)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 
     @Override

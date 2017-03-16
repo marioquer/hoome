@@ -1,48 +1,84 @@
 package entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
- * Created by marioquer on 2017/3/14.
+ * Created by marioquer on 2017/3/15.
  */
 @Entity
-@Table(name = "vip_level")
+@Table(name = "vip_level", schema = "hoome", catalog = "")
 public class VipLevel {
-    private Integer level;//0普通会员，1银卡，2金卡
-    private Double discount;
-    private Double point_level;
-    private Double require;
+    private byte level;
+    private double discount;
+    private double pointLevel;
+    private double require;
 
-    public Integer getLevel() {
+    @Id
+    @Column(name = "level", nullable = false)
+    public byte getLevel() {
         return level;
     }
 
-    public void setLevel(Integer level) {
+    public void setLevel(byte level) {
         this.level = level;
     }
 
-    public Double getDiscount() {
+    @Basic
+    @Column(name = "discount", nullable = false, precision = 0)
+    public double getDiscount() {
         return discount;
     }
 
-    public void setDiscount(Double discount) {
+    public void setDiscount(double discount) {
         this.discount = discount;
     }
 
-    public Double getPoint_level() {
-        return point_level;
+    @Basic
+    @Column(name = "point_level", nullable = false, precision = 0)
+    public double getPointLevel() {
+        return pointLevel;
     }
 
-    public void setPoint_level(Double point_level) {
-        this.point_level = point_level;
+    public void setPointLevel(double pointLevel) {
+        this.pointLevel = pointLevel;
     }
 
-    public Double getRequire() {
+    @Basic
+    @Column(name = "require", nullable = false, precision = 0)
+    public double getRequire() {
         return require;
     }
 
-    public void setRequire(Double require) {
+    public void setRequire(double require) {
         this.require = require;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        VipLevel vipLevel = (VipLevel) o;
+
+        if (level != vipLevel.level) return false;
+        if (Double.compare(vipLevel.discount, discount) != 0) return false;
+        if (Double.compare(vipLevel.pointLevel, pointLevel) != 0) return false;
+        if (Double.compare(vipLevel.require, require) != 0) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = (int) level;
+        temp = Double.doubleToLongBits(discount);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(pointLevel);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(require);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
     }
 }

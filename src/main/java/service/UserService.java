@@ -8,5 +8,5 @@ import entity.User;
 public interface UserService {
     User getUser(Integer id);
 
-    User getUser(String phone);
+    boolean login(String phone,String password);
 }
