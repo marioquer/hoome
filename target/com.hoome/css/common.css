@@ -57,9 +57,16 @@ body {
 .padding-bottom-20 {
     padding-bottom: 20px;
 }
+.margin-left-5 {
+    margin-left: 5px;
+}
 
 .margin-left-10 {
     margin-left: 10px;
+}
+
+.margin-left-20 {
+    margin-left: 20px;
 }
 
 .margin-right-10 {
@@ -254,4 +261,16 @@ a.page-title{
 
 .side-nav a{
     font-size: 18px;
+}
+
+.card-price{
+    position: absolute;
+    bottom: 18px;
+    font-size: 24px;
+    right:20px;
+    color: white;
+}
+
+.none{
+    display: none;
 }

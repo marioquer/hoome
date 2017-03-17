@@ -19,9 +19,12 @@ public class Apply {
     private byte type;
     private Byte status;
     private User userByOwnerId;
+    private Double bigPrice;
+    private Double smallPrice;
 
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -164,5 +167,25 @@ public class Apply {
 
     public void setUserByOwnerId(User userByOwnerId) {
         this.userByOwnerId = userByOwnerId;
+    }
+
+    @Basic
+    @Column(name = "big_price", nullable = true, precision = 0)
+    public Double getBigPrice() {
+        return bigPrice;
+    }
+
+    public void setBigPrice(Double bigPrice) {
+        this.bigPrice = bigPrice;
+    }
+
+    @Basic
+    @Column(name = "small_price", nullable = true, precision = 0)
+    public Double getSmallPrice() {
+        return smallPrice;
+    }
+
+    public void setSmallPrice(Double smallPrice) {
+        this.smallPrice = smallPrice;
     }
 }

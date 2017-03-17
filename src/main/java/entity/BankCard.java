@@ -15,6 +15,7 @@ public class BankCard {
 
     @Id
     @Column(name = "id", nullable = false, length = 20)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public String getId() {
         return id;
     }

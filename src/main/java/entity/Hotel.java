@@ -18,15 +18,27 @@ public class Hotel {
     private Collection<BookRecord> bookRecordsById;
     private User userByOwnerId;
     private Collection<Room> roomsById;
+    private String name;
 
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Basic
+    @Column(name = "name", nullable = false, length = 20)
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Basic
@@ -146,4 +158,6 @@ public class Hotel {
     public void setRoomsById(Collection<Room> roomsById) {
         this.roomsById = roomsById;
     }
+
+
 }
