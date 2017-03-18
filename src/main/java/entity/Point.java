@@ -77,41 +77,5 @@ public class Point {
         this.time = time;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        Point point1 = (Point) o;
-
-        if (id != point1.id) return false;
-        if (vipId != point1.vipId) return false;
-        if (type != point1.type) return false;
-        if (point != point1.point) return false;
-        if (balance != point1.balance) return false;
-        if (time != null ? !time.equals(point1.time) : point1.time != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + vipId;
-        result = 31 * result + (int) type;
-        result = 31 * result + point;
-        result = 31 * result + balance;
-        result = 31 * result + (time != null ? time.hashCode() : 0);
-        return result;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "vip_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
-    public VipCard getVipCardByVipId() {
-        return vipCardByVipId;
-    }
-
-    public void setVipCardByVipId(VipCard vipCardByVipId) {
-        this.vipCardByVipId = vipCardByVipId;
-    }
 }

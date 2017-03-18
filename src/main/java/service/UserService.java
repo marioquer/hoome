@@ -13,4 +13,6 @@ public interface UserService {
     Map<String, Object> login(String phone, String password);
 
     boolean logup(String phone,String name, String password,byte role);
+
+    boolean newVip(Integer id);
 }

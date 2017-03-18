@@ -24,8 +24,36 @@
 </header>
 
 <main>
-    <div class="container" style="background: red;height: 1000px;"></div>
-    <%@ include file="../common/footer.jsp" %>
+    <div class="container" style="min-height: 500px;">
+        <div class="row vip_form">
+            <div class="col s12 m12">
+                <div class="card white">
+                    <div class="card-content blue-grey-text text-darken-1">
+                        <span class="card-title blue-grey-text text-darken-2" style="font-size: 30px;">申请会员卡</span>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="card-content">
+                        <p>注册为普通会员能在此平台订购房间，且需一次性充值1000元以上进行激活，因平台不支持第三方支付，故不办理会员卡不能进行房间预定，银卡和金卡会员更能享受最低9折订房优惠，欢迎办理。</p></div>
+                    <%--<div class="card-content row">--%>
+                    <%--<div class="input-field col s6">--%>
+                    <%--<input id="bank_card" type="text">--%>
+                    <%--<label for="bank_card">银行卡账号</label>--%>
+                    <%--</div>--%>
+                    <%--<div class="input-field col s6">--%>
+                    <%--<input id="balance" type="text" placeholder="1000元以上才能">--%>
+                    <%--<label for="balance">开卡充值金额</label>--%>
+                    <%--</div>--%>
+                    <%--</div>--%>
+
+                    <div class="card-action">
+                        <a href="#" class="btn teal waves-effect waves-light">申请开办</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%--<%@ include file="../common/footer.jsp" %>--%>
 </main>
 
 <!--  Scripts-->

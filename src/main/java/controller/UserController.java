@@ -80,6 +80,16 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/newVip", method = RequestMethod.POST)
+    @ResponseBody
+    public String newVip(Integer id) {
+        if (userService.newVip(id)){
+            return "success";
+        }else{
+            return "fail";
+        }
+    }
+
     //test
     @RequestMapping(value = "/showSession", method = RequestMethod.GET)
     @ResponseBody
@@ -87,4 +97,5 @@ public class UserController {
         User user = (User) request.getSession().getAttribute("user");
         return user.getPhone();
     }
+
 }

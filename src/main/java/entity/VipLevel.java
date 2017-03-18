@@ -52,33 +52,4 @@ public class VipLevel {
     public void setRequire(double require) {
         this.require = require;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        VipLevel vipLevel = (VipLevel) o;
-
-        if (level != vipLevel.level) return false;
-        if (Double.compare(vipLevel.discount, discount) != 0) return false;
-        if (Double.compare(vipLevel.pointLevel, pointLevel) != 0) return false;
-        if (Double.compare(vipLevel.require, require) != 0) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result;
-        long temp;
-        result = (int) level;
-        temp = Double.doubleToLongBits(discount);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(pointLevel);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(require);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        return result;
-    }
 }

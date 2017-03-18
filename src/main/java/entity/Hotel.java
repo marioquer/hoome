@@ -47,6 +47,7 @@ public class Hotel {
         return smallNum;
     }
 
+
     public void setSmallNum(int smallNum) {
         this.smallNum = smallNum;
     }
@@ -100,64 +101,5 @@ public class Hotel {
     public void setIntroduction(String introduction) {
         this.introduction = introduction;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Hotel hotel = (Hotel) o;
-
-        if (id != hotel.id) return false;
-        if (smallNum != hotel.smallNum) return false;
-        if (bigNum != hotel.bigNum) return false;
-        if (ownerId != hotel.ownerId) return false;
-        if (address != null ? !address.equals(hotel.address) : hotel.address != null) return false;
-        if (phone != null ? !phone.equals(hotel.phone) : hotel.phone != null) return false;
-        if (introduction != null ? !introduction.equals(hotel.introduction) : hotel.introduction != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + smallNum;
-        result = 31 * result + bigNum;
-        result = 31 * result + (address != null ? address.hashCode() : 0);
-        result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        result = 31 * result + ownerId;
-        result = 31 * result + (introduction != null ? introduction.hashCode() : 0);
-        return result;
-    }
-
-    @OneToMany(mappedBy = "hotelByHotelId")
-    public Collection<BookRecord> getBookRecordsById() {
-        return bookRecordsById;
-    }
-
-    public void setBookRecordsById(Collection<BookRecord> bookRecordsById) {
-        this.bookRecordsById = bookRecordsById;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
-    public User getUserByOwnerId() {
-        return userByOwnerId;
-    }
-
-    public void setUserByOwnerId(User userByOwnerId) {
-        this.userByOwnerId = userByOwnerId;
-    }
-
-    @OneToMany(mappedBy = "hotelByHotelId")
-    public Collection<Room> getRoomsById() {
-        return roomsById;
-    }
-
-    public void setRoomsById(Collection<Room> roomsById) {
-        this.roomsById = roomsById;
-    }
-
 
 }

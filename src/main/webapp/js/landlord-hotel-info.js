@@ -16,6 +16,7 @@ function apply(id){
         url: "/landlord/create",
         async: false,
         data: {
+            "owner_id":id,
             "phone": phone,
             "name": name,
             "small_num": small_num,

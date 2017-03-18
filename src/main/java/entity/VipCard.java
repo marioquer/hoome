@@ -16,6 +16,7 @@ public class VipCard {
     private byte level;
     private int point;
     private Timestamp createdAt;
+    private Timestamp updatedAt;
     private Timestamp expiredAt;
     private byte status;
     private Collection<Balance> balancesById;
@@ -84,6 +85,16 @@ public class VipCard {
     }
 
     @Basic
+    @Column(name = "updated_at", nullable = true)
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp createdAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    @Basic
     @Column(name = "expired_at", nullable = false)
     public Timestamp getExpiredAt() {
         return expiredAt;
@@ -103,66 +114,4 @@ public class VipCard {
         this.status = status;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        VipCard vipCard = (VipCard) o;
-
-        if (id != vipCard.id) return false;
-        if (userId != vipCard.userId) return false;
-        if (Double.compare(vipCard.balance, balance) != 0) return false;
-        if (level != vipCard.level) return false;
-        if (point != vipCard.point) return false;
-        if (status != vipCard.status) return false;
-        if (createdAt != null ? !createdAt.equals(vipCard.createdAt) : vipCard.createdAt != null) return false;
-        if (expiredAt != null ? !expiredAt.equals(vipCard.expiredAt) : vipCard.expiredAt != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result;
-        long temp;
-        result = id;
-        result = 31 * result + userId;
-        temp = Double.doubleToLongBits(balance);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (int) level;
-        result = 31 * result + point;
-        result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
-        result = 31 * result + (expiredAt != null ? expiredAt.hashCode() : 0);
-        result = 31 * result + (int) status;
-        return result;
-    }
-
-    @OneToMany(mappedBy = "vipCardByVipId")
-    public Collection<Balance> getBalancesById() {
-        return balancesById;
-    }
-
-    public void setBalancesById(Collection<Balance> balancesById) {
-        this.balancesById = balancesById;
-    }
-
-    @OneToMany(mappedBy = "vipCardByVipId")
-    public Collection<Point> getPointsById() {
-        return pointsById;
-    }
-
-    public void setPointsById(Collection<Point> pointsById) {
-        this.pointsById = pointsById;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
-    public User getUserByUserId() {
-        return userByUserId;
-    }
-
-    public void setUserByUserId(User userByUserId) {
-        this.userByUserId = userByUserId;
-    }
 }

@@ -1,5 +1,9 @@
 package entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.Collection;
 
@@ -14,11 +18,7 @@ public class User {
     private String name;
     private String password;
     private byte role;
-    private Collection<Apply> appliesById;
-    private Collection<BankCard> bankCardsById;
-    private Collection<BookRecord> bookRecordsById;
-    private Collection<Hotel> hotelsById;
-    private Collection<VipCard> vipCardsById;
+    private byte isVip;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -71,74 +71,14 @@ public class User {
         this.role = role;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        User user = (User) o;
-
-        if (id != user.id) return false;
-        if (role != user.role) return false;
-        if (phone != null ? !phone.equals(user.phone) : user.phone != null) return false;
-        if (name != null ? !name.equals(user.name) : user.name != null) return false;
-        if (password != null ? !password.equals(user.password) : user.password != null) return false;
-
-        return true;
+    @Basic
+    @Column(name = "isVip", nullable = true)
+    public byte getIsVip() {
+        return isVip;
     }
 
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (int) role;
-        return result;
-    }
-
-    @OneToMany(mappedBy = "userByOwnerId")
-    public Collection<Apply> getAppliesById() {
-        return appliesById;
-    }
-
-    public void setAppliesById(Collection<Apply> appliesById) {
-        this.appliesById = appliesById;
-    }
-
-    @OneToMany(mappedBy = "userByUserId")
-    public Collection<BankCard> getBankCardsById() {
-        return bankCardsById;
-    }
-
-    public void setBankCardsById(Collection<BankCard> bankCardsById) {
-        this.bankCardsById = bankCardsById;
-    }
-
-    @OneToMany(mappedBy = "userByBookerId")
-    public Collection<BookRecord> getBookRecordsById() {
-        return bookRecordsById;
-    }
-
-    public void setBookRecordsById(Collection<BookRecord> bookRecordsById) {
-        this.bookRecordsById = bookRecordsById;
-    }
-
-    @OneToMany(mappedBy = "userByOwnerId")
-    public Collection<Hotel> getHotelsById() {
-        return hotelsById;
-    }
-
-    public void setHotelsById(Collection<Hotel> hotelsById) {
-        this.hotelsById = hotelsById;
-    }
-
-    @OneToMany(mappedBy = "userByUserId")
-    public Collection<VipCard> getVipCardsById() {
-        return vipCardsById;
-    }
-
-    public void setVipCardsById(Collection<VipCard> vipCardsById) {
-        this.vipCardsById = vipCardsById;
+    public void setIsVip(byte isVip) {
+        this.isVip = isVip;
     }
 }
+

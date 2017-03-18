@@ -18,9 +18,10 @@ public class Apply {
     private Timestamp applyTime;
     private byte type;
     private Byte status;
-    private User userByOwnerId;
     private Double bigPrice;
     private Double smallPrice;
+    private Timestamp handleTime;
+    private String name;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -123,52 +124,6 @@ public class Apply {
         this.status = status;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Apply apply = (Apply) o;
-
-        if (id != apply.id) return false;
-        if (smallNum != apply.smallNum) return false;
-        if (bigNum != apply.bigNum) return false;
-        if (ownerId != apply.ownerId) return false;
-        if (type != apply.type) return false;
-        if (address != null ? !address.equals(apply.address) : apply.address != null) return false;
-        if (phone != null ? !phone.equals(apply.phone) : apply.phone != null) return false;
-        if (introduction != null ? !introduction.equals(apply.introduction) : apply.introduction != null) return false;
-        if (applyTime != null ? !applyTime.equals(apply.applyTime) : apply.applyTime != null) return false;
-        if (status != null ? !status.equals(apply.status) : apply.status != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + smallNum;
-        result = 31 * result + bigNum;
-        result = 31 * result + (address != null ? address.hashCode() : 0);
-        result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        result = 31 * result + ownerId;
-        result = 31 * result + (introduction != null ? introduction.hashCode() : 0);
-        result = 31 * result + (applyTime != null ? applyTime.hashCode() : 0);
-        result = 31 * result + (int) type;
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        return result;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
-    public User getUserByOwnerId() {
-        return userByOwnerId;
-    }
-
-    public void setUserByOwnerId(User userByOwnerId) {
-        this.userByOwnerId = userByOwnerId;
-    }
-
     @Basic
     @Column(name = "big_price", nullable = true, precision = 0)
     public Double getBigPrice() {
@@ -187,5 +142,25 @@ public class Apply {
 
     public void setSmallPrice(Double smallPrice) {
         this.smallPrice = smallPrice;
+    }
+
+    @Basic
+    @Column(name = "handle_time", nullable = true)
+    public Timestamp getHandleTime() {
+        return handleTime;
+    }
+
+    public void setHandleTime(Timestamp handleTime) {
+        this.handleTime = handleTime;
+    }
+
+    @Basic
+    @Column(name = "name", nullable = true)
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

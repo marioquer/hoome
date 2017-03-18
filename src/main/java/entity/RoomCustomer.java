@@ -66,37 +66,4 @@ public class RoomCustomer {
         this.identityId = identityId;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        RoomCustomer that = (RoomCustomer) o;
-
-        if (recordId != that.recordId) return false;
-        if (gender != that.gender) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (identityId != null ? !identityId.equals(that.identityId) : that.identityId != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (recordId ^ (recordId >>> 32));
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (int) gender;
-        result = 31 * result + (identityId != null ? identityId.hashCode() : 0);
-        return result;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "record_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
-    public BookRecord getBookRecordByRecordId() {
-        return bookRecordByRecordId;
-    }
-
-    public void setBookRecordByRecordId(BookRecord bookRecordByRecordId) {
-        this.bookRecordByRecordId = bookRecordByRecordId;
-    }
 }

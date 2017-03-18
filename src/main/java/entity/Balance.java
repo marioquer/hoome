@@ -109,7 +109,7 @@ public class Balance {
         return result;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "vip_id", referencedColumnName = "id", nullable = false,insertable = false, updatable = false
     )
     public VipCard getVipCardByVipId() {

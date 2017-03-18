@@ -1,3 +1,4 @@
+<%@ page import="entity.User" %>
 <%@ page language="java" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,8 +25,31 @@
 </header>
 
 <main>
-    <div class="container" style="background: red;height: 1000px;"></div>
-    <%@ include file="../common/footer.jsp" %>
+    <div class="container" style="min-height: 500px;">
+        <%
+            User user = (User)session.getAttribute("user");
+            if (user.getIsVip()==0){
+        %>
+        <div class="row margin-top-20 new">
+            <div class="col s12 m12">
+                <div class="card-panel blue-grey">
+          <span class="white-text">您还没有开设会员卡，无法查看房间，点击申请按钮立即发出会员卡申请！
+          </span>
+                </div>
+            </div>
+            <a class="margin-left-10 waves-effect waves-light btn teal" href="/user/account">申请会员卡</a>
+        </div>
+        <%
+            }else{
+        %>
+        <div class=""></div>
+        <%
+            }
+        %>
+
+
+    </div>
+    <%--<%@ include file="../common/footer.jsp" %>--%>
 </main>
 
 <!--  Scripts-->

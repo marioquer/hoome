@@ -25,7 +25,7 @@
 
 <main>
     <div class="container" style="min-height: 500px;">
-        <div class="row margin-top-20">
+        <div class="row margin-top-20 new">
             <div class="col s12 m12">
                 <div class="card-panel blue-grey">
           <span class="white-text">您还没有开设您的客栈，点击申请按钮立即发出开店申请！
@@ -40,7 +40,7 @@
             <div class="col s12 m12">
                 <div class="card blue-grey darken-1">
                     <div class="card-content white-text">
-                        <span class="card-title" style="font-size: 30px;">老王客栈</span>
+                        <span class="card-title hotel_name" style="font-size: 30px;">老王客栈</span>
                     </div>
                     <div class="divider blue-grey lighten-2"></div>
                     <div class="card-content white-text">
@@ -50,18 +50,18 @@
             </div>
         </div>
 
-        <div class="row hotel">
+        <div class="row hotel none">
             <div class="col s12 m12">
                 <div class="card white">
                     <div class="card-content blue-grey-text text-darken-1">
-                        <span class="card-title blue-grey-text text-darken-2" style="font-size: 30px;">老王客栈</span>
+                        <span class="card-title blue-grey-text text-darken-2 hotel_name" style="font-size: 30px;">老王客栈</span>
                         <div class="margin-top-10" style="float: right">
-                            <i class="material-icons">room</i><span class="margin-left-5">南京大学</span>
-                            <i class="material-icons margin-left-20">contact_phone</i><span class="margin-left-5">15615161717</span></div>
+                            <i class="material-icons">room</i><span class="margin-left-5" id="address_show">南京大学</span>
+                            <i class="material-icons margin-left-20">contact_phone</i><span class="margin-left-5" id="phone_show">15615161717</span></div>
                     </div>
                     <div class="divider"></div>
                     <div class="card-content blue-grey-text text-darken-1">
-                        <p>我的介绍啊啊啊啊啊超级长的啊啊啊啊啊</p>
+                        <p id="introduction_show">我的介绍啊啊啊啊啊超级长的啊啊啊啊啊</p>
                     </div>
                     <div class="card-action">
                         <a href="#" class="btn blue waves-effect waves-light">修改客栈信息</a>
@@ -70,13 +70,13 @@
             </div>
         </div>
 
-        <div class="row room">
+        <div class="row room none">
             <div class="col s12 m6">
                 <div class="card">
                     <div class="card-image">
                         <img src="/image/background.jpg">
                         <span class="card-title">单人房</span>
-                        <span class="card-price">￥228</span>
+                        <span class="card-price" id="small_price_show">￥228</span>
                     </div>
                     <div class="card-content blue-grey-text text-darken-1">
                         <p>单人房能够容纳1-2人入住，极致体验</p>
@@ -91,7 +91,7 @@
                     <div class="card-image">
                         <img src="/image/background.jpg">
                         <span class="card-title">双人房</span>
-                        <span class="card-price">￥268</span>
+                        <span class="card-price" id="big_price_show">￥268</span>
                     </div>
                     <div class="card-content blue-grey-text text-darken-1">
                         <p>双人房为标准房，内设两张小床</p>
@@ -134,7 +134,7 @@
             </div>
             <div class="input-field col s6">
                 <input id="small_price" type="text">
-                <label for="small_price">双人间数目(元)</label>
+                <label for="small_price">双人间价格(元)</label>
             </div>
             <div class="input-field col s12">
                 <input id="address" type="text">
@@ -147,7 +147,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <a onclick="apply(${sessionScope.get("user").getId()})" href=""
+        <a onclick="apply(${sessionScope.get("user").getId()})"
            class=" modal-action waves-effect waves-blue btn blue">提交申请</a>
         <a href="" class="modal-action modal-close waves-effect waves-grey btn-flat">取消</a>
     </div>
@@ -172,9 +172,23 @@
         success: function (result) {
             switch (result.state) {
                 case "approved":
+                    //add data
+                    $(".hotel_name").html(result.hotel.name);
+                    $("#address_show").html(result.hotel.address);
+                    $("#phone_show").html(result.hotel.phone);
+                    $("#introduction_show").html(result.hotel.introduction);
+                    $("#big_price_show").html("￥"+result.big_room.price);
+                    $("#small_price_show").html("￥"+result.small_room.price);
 
+                    $(".hotel").css("display","block");
+                    $(".room").css("display","block");
+                    $(".new").css("display","none");
                     break;
                 case "suspend":
+                    //add data
+                    $(".hotel_name").html(result.apply.name);
+                    $(".apply").css("display","block");
+                    $(".new").css("display","none");
                     break;
             }
         },
