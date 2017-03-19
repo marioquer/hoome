@@ -1,5 +1,9 @@
 package service;
 
+import entity.Room;
+
+import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,5 +21,7 @@ public interface LandlordService {
                         String introduction,
                         Double big_price,
                         Double small_price);
+
+    List<Room> getTargetRooms(Timestamp beginTime,Timestamp endTime,byte roomType);
 
 }

@@ -59,7 +59,6 @@ public class UserDaoImpl implements UserDao {
             List<User> list = criteria.list();
 
             if (list.size() == 0) {
-                System.out.println("aaa");
                 return null;
             } else {
                 User user = list.get(0);
@@ -94,6 +93,22 @@ public class UserDaoImpl implements UserDao {
             e.printStackTrace();
             HibernateUtil.closeSession();
             return null;
+        }
+    }
+
+    @Override
+    public boolean updateUser(User user) {
+        try {
+            session = HibernateUtil.currentSession();
+            Transaction tx = session.beginTransaction();
+            session.update(user);
+            tx.commit();
+            HibernateUtil.closeSession();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            HibernateUtil.closeSession();
+            return false;
         }
     }
 }

@@ -45,7 +45,6 @@ public class RoomDaoImpl implements RoomDao {
             session.save(room);
             tx.commit();
             HibernateUtil.closeSession();
-            System.out.println(room.getHotelId());
             return true;
         } catch (Exception e) {
             e.printStackTrace();

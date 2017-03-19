@@ -4,6 +4,7 @@ import entity.User;
 
 import javax.servlet.http.HttpSession;
 
+import entity.VipCard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import service.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -82,12 +84,46 @@ public class UserController {
 
     @RequestMapping(value = "/newVip", method = RequestMethod.POST)
     @ResponseBody
-    public String newVip(Integer id) {
+    public String newVip(Integer id,HttpServletRequest request) {
         if (userService.newVip(id)){
+            User user = (User)request.getSession().getAttribute("user");
+            user.setIsVip((byte)1);
+            request.getSession().setAttribute("user",user);
             return "success";
         }else{
             return "fail";
         }
+    }
+
+    @RequestMapping(value = "/activateVip", method = RequestMethod.POST)
+    @ResponseBody
+    public String activateVip(Integer id,Double balance,String bank_card,HttpServletRequest request) {
+        if (userService.activateVip(id,balance,bank_card)){
+            User user = (User)request.getSession().getAttribute("user");
+            user.setIsVip((byte)2);
+            request.getSession().setAttribute("user",user);
+            return "success";
+        }else{
+            return "fail";
+        }
+    }
+
+    @RequestMapping(value = "/topUp", method = RequestMethod.POST)
+    @ResponseBody
+    public String topUp(Integer id,Double money) {
+        if (userService.topUp(id,money)){
+            return "success";
+        }else{
+            return "fail";
+        }
+    }
+
+    @RequestMapping(value = "/getMyVip", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> getMyVip(Integer id) {
+        Map<String, Object> json = new HashMap<String, Object>();
+        return userService.getMyVip(id);
+
     }
 
     //test

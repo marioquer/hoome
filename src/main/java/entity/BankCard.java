@@ -33,14 +33,4 @@ public class BankCard {
     public void setUserId(int userId) {
         this.userId = userId;
     }
-
-    @Basic
-    @Column(name = "bank", nullable = false, length = 60)
-    public String getBank() {
-        return bank;
-    }
-
-    public void setBank(String bank) {
-        this.bank = bank;
-    }
 }

@@ -2,13 +2,9 @@
     $(function () {
         $('.button-collapse').sideNav();
         $('.parallax').parallax();
-        $('.datepicker').pickadate({
-            selectMonths: true, // Creates a dropdown to control month
-            selectYears: 20 // Creates a dropdown of 15 years to control year
-        });
     }); // end of document ready
-})(jQuery); // end of jQuery name space
 
+})(jQuery); // end of jQuery name space、
 
 $(document).ready(function () {
     $('.modal').modal();

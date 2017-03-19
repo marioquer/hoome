@@ -1,6 +1,7 @@
 package entity;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Collection;
 
@@ -21,9 +22,8 @@ public class BookRecord {
     private Timestamp inTime;
     private Timestamp outTime;
     private Byte payMethod;
-    private User userByBookerId;
-    private Hotel hotelByHotelId;
-    private Collection<RoomCustomer> roomCustomersById;
+    private Date targetInTime;
+    private Date targetOutTime;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -134,5 +134,25 @@ public class BookRecord {
 
     public void setPayMethod(Byte payMethod) {
         this.payMethod = payMethod;
+    }
+
+    @Basic
+    @Column(name = "target_in_time", nullable = false)
+    public Date getTargetInTime() {
+        return targetInTime;
+    }
+
+    public void setTargetInTime(Date targetInTime) {
+        this.targetInTime = targetInTime;
+    }
+
+    @Basic
+    @Column(name = "target_out_time", nullable = true)
+    public Date getTargetOutTime() {
+        return targetOutTime;
+    }
+
+    public void setTargetOutTime(Date targetOutTime) {
+        this.targetOutTime = targetOutTime;
     }
 }

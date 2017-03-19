@@ -90,7 +90,7 @@ public class VipCard {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Timestamp createdAt) {
+    public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
     }
 

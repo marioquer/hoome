@@ -80,10 +80,17 @@ public class LandlordServiceImpl implements LandlordService{
         return map;
     }
 
+    @Override
+    public List<Room> getTargetRooms(Timestamp beginTime, Timestamp endTime, byte roomType) {
+
+        return null;
+    }
+
     public static void main(String[] args){
         String time= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         Timestamp a = new Timestamp(System.currentTimeMillis());
         System.out.println(a);
         System.out.println("aaaa");
     }
+
 }
