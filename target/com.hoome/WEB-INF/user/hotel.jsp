@@ -71,6 +71,24 @@
                 </div>
             </div>
         </div>
+
+        <div class="row" id="room_container">
+            <div class="col s12 m6 none" id="room_pattern">
+                <div class="card">
+                    <div class="card-image">
+                        <div class="room_id none"></div>
+                        <div class="hotel_id none"></div>
+                        <img src="/image/background.jpg">
+                        <span class="card-title">天上人间</span>
+                        <span class="card-price">￥228</span>
+                    </div>
+                    <div class="card-action">
+                        <a onclick="book(<%=user.getId()%>,this)" class="btn teal waves-effect waves-light">预定</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <%
             }
         %>
@@ -91,46 +109,37 @@
         format: 'yyyy-mm-dd'
     });
 
-
     function searchRooms() {
         var beginTime = $("#begin_time").val();
         var endTime = $("#end_time").val();
-        var roomType = $("#room_style");
+        var roomType = $("#room_style").val();
 
         if (beginTime == "" || endTime == "" || roomType == "") {
             Materialize.toast("请输入完整信息！", 1200);
         } else {
             $.ajax({
                 method: "post",
-                url: "/user/getMyVip",
+                url: "/user/searchRooms",
                 async: false,
                 dataType: "json",
                 data: {
-                    "id": id,
+                    "beginTime": beginTime,
+                    "endTime": endTime,
+                    "roomType": roomType
                 },
                 success: function (result) {
-                    var moneyHtml = $("#money_record_pattern").html();
-                    var pointHtml = $("#point_record_pattern").html();
-                    var vipRecordsList = result.vipRecords;
-                    var pointRecordsList = result.point;
-
-                    var vipCard = result.vipCard;
-                    var idString = vipCard.id.toString();
-                    var idLength = idString.length;
-                    for (var i = 0; i < (7 - idLength); i++) {
-                        idString = "0" + idString;
-                    }
+                    var roomHtml = $("#room_pattern").html();
 
                     //all topUp record
-                    for (var i = 0; i < vipRecordsList.length; i++) {
-                        var li = document.createElement("li");
-                        li.className = "collection-item blue-grey-text text-darken-1";
-                        li.innerHTML = moneyHtml;
-                        li.getElementsByClassName("money-balance-record")[0].innerHTML = vipRecordsList[i].balance;
-                        li.getElementsByClassName("in-out")[0].innerHTML = vipRecordsList[i].inOut > 0 ? ("+" + vipRecordsList[i].inOut) : vipRecordsList[i].inOut;
-                        if (vipRecordsList[i].type == 1)
-                            li.getElementsByClassName("in-out-type")[0].innerHTML = "积分兑换";
-                        $("#money_balance_container").append(li);
+                    for (var i = 0; i < result.length; i++) {
+                        var li = document.createElement("div");
+                        li.className = "col s12 m6";
+                        li.innerHTML = roomHtml;
+                        li.getElementsByClassName("room_id")[0].innerHTML = result[i].id;
+                        li.getElementsByClassName("hotel_id")[0].innerHTML = result[i].hotelId;
+                        li.getElementsByClassName("card-title")[0].innerHTML = result[i].hotelName;
+                        li.getElementsByClassName("card-price")[0].innerHTML = "￥" + result[i].specialPrice;
+                        $("#room_container").append(li);
                     }
                 },
                 error: function () {
@@ -139,6 +148,50 @@
             });
 
         }
+
+    }
+
+
+    function book(id, obj) {
+        var room_id = obj.parentNode.parentNode.getElementsByClassName("room_id")[0].innerHTML;
+        var hotel_id = obj.parentNode.parentNode.getElementsByClassName("hotel_id")[0].innerHTML;
+        var price = obj.parentNode.parentNode.getElementsByClassName("card-price")[0].innerHTML;
+        var hotel_name = obj.parentNode.parentNode.getElementsByClassName("card-title")[0].innerHTML;
+        price = price.split("￥")[1];
+        var beginTime = $("#begin_time").val();
+        var endTime = $("#end_time").val();
+        var roomType = $("#room_style").val();
+        var payMethod = 1; //会员卡支付
+
+        $.ajax({
+            method: "post",
+            url: "/user/book",
+            async: false,
+            data: {
+                "booker_id": id,
+                "price": price,
+                "room_id": room_id,
+                "hotel_id": hotel_id,
+                "room_style": roomType,
+                "pay_method": payMethod,
+                "target_in_time": beginTime,
+                "target_out_time": endTime,
+                "hotel_name": hotel_name
+            },
+            success: function (result) {
+                if (result == "success") {
+                    Materialize.toast('预定成功!', 1200, (function () {
+                        window.location.href = "/user/order";
+                    })());
+                } else {
+
+                }
+            },
+            error: function () {
+                Materialize.toast('请求出错!', 1200);
+            }
+        });
+
 
     }
 

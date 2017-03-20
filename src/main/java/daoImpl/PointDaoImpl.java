@@ -40,4 +40,9 @@ public class PointDaoImpl implements PointDao {
             return null;
         }
     }
+
+    @Override
+    public boolean addRecord(Point point) {
+        return HibernateUtil.addObject(point);
+    }
 }

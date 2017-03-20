@@ -48,5 +48,35 @@ public class LandlordController {
         }
     }
 
+    @RequestMapping(value = "/updateHotel", method = RequestMethod.POST)
+    @ResponseBody
+    public String createHotel(Integer owner_id,
+                              String phone,
+                              String name,
+                              Integer small_num,
+                              Integer big_num,
+                              String address,
+                              String introduction) {
+        System.out.println(owner_id);
+        boolean result = landlordService.updateHotel(owner_id, phone, name, small_num, big_num, address, introduction);
+        if (result) {
+            return "success";
+        } else {
+            return "fail";
+        }
+    }
+
+    @RequestMapping(value = "/publishSpecial", method = RequestMethod.POST)
+    @ResponseBody
+    public String publishSpecial(Integer user_id, String time,Double smallprice,Double bigprice) {
+        System.out.println(smallprice);
+        System.out.println(bigprice);
+        if(landlordService.publishSpecial(user_id,time,smallprice,bigprice)){
+            return "success";
+        }else{
+            return "fail";
+        }
+    }
+
 
 }

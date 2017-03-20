@@ -21,7 +21,7 @@ import java.util.Map;
  * Created by marioquer on 2017/3/17.
  */
 @Service
-public class LandlordServiceImpl implements LandlordService{
+public class LandlordServiceImpl implements LandlordService {
     @Autowired
     ApplyDao applyDao;
     @Autowired
@@ -51,30 +51,51 @@ public class LandlordServiceImpl implements LandlordService{
         return applyDao.addApply(apply);
     }
 
+
+    @Override
+    public boolean updateHotel(Integer owner_id, String phone, String name, Integer small_num, Integer big_num, String address, String introduction) {
+        byte bit = 0;
+        Timestamp time = new Timestamp(System.currentTimeMillis());
+        Apply apply = new Apply();
+        System.out.println(owner_id);
+        apply.setOwnerId(owner_id);
+        apply.setPhone(phone);
+        apply.setName(name);
+        apply.setSmallNum(small_num);
+        apply.setBigNum(big_num);
+        apply.setAddress(address);
+        apply.setIntroduction(introduction);
+        apply.setType((byte)1);
+        apply.setStatus(bit);
+        apply.setApplyTime(time);
+        System.out.println(apply.getName());
+        return applyDao.addApply(apply);
+    }
+
     @Override
     public Map<String, Object> getMyHotel(Integer id) {
-        Map<String,Object> map = new HashMap<String,Object>();
+        Map<String, Object> map = new HashMap<String, Object>();
         Hotel hotel = hotelDao.getHotelByOwner(id);
         Apply apply = applyDao.getApplyByOwner(id);
-        if (hotel!=null){
+        if (hotel != null) {
             List<Room> rooms = roomDao.getRoomsByHotel(hotel.getId());
-            map.put("state","approved");
-            map.put("hotel",hotel);
-            if (rooms!=null){
-                if (rooms.get(0).getRoomStyle()==0) {
+            map.put("state", "approved");
+            map.put("hotel", hotel);
+            if (rooms != null) {
+                if (rooms.get(0).getRoomStyle() == 0) {
                     map.put("small_room", rooms.get(0));
                     map.put("big_room", rooms.get(1));
-                }else {
+                } else {
                     map.put("big_room", rooms.get(0));
                     map.put("small_room", rooms.get(1));
                 }
             }
-        }else{
-            if (apply!=null&&apply.getStatus()==0){
-                map.put("state","suspend");
-                map.put("apply",apply);
-            }else {
-                map.put("state","none");
+        } else {
+            if (apply != null && apply.getStatus() == 0) {
+                map.put("state", "suspend");
+                map.put("apply", apply);
+            } else {
+                map.put("state", "none");
             }
         }
         return map;
@@ -86,11 +107,30 @@ public class LandlordServiceImpl implements LandlordService{
         return null;
     }
 
-    public static void main(String[] args){
-        String time= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+    public static void main(String[] args) {
+        String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         Timestamp a = new Timestamp(System.currentTimeMillis());
         System.out.println(a);
         System.out.println("aaaa");
     }
 
+    @Override
+    public boolean publishSpecial(Integer user_id, String time, Double smallPrice, Double bigPrice) {
+        Hotel hotel = hotelDao.getHotelByOwner(user_id);
+        List<Room> rooms = roomDao.getRoomsByHotel(hotel.getId());
+        Room one = rooms.get(0);
+        Room two = rooms.get(1);
+        if (one.getRoomStyle() == (byte) 0) {
+            System.out.println("bbb");
+            one.setSpecialPrice(smallPrice);
+            two.setSpecialPrice(bigPrice);
+        } else {
+            System.out.println("ccc");
+            one.setSpecialPrice(bigPrice);
+            two.setSpecialPrice(smallPrice);
+        }
+        System.out.println(smallPrice+"service");
+        System.out.println(one.getSpecialPrice());
+        return roomDao.updateRoom(one) && roomDao.updateRoom(two);
+    }
 }

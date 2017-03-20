@@ -22,8 +22,9 @@ public class BookRecord {
     private Timestamp inTime;
     private Timestamp outTime;
     private Byte payMethod;
-    private Date targetInTime;
-    private Date targetOutTime;
+    private String targetInTime;
+    private String targetOutTime;
+    private String hotelName;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -138,21 +139,31 @@ public class BookRecord {
 
     @Basic
     @Column(name = "target_in_time", nullable = false)
-    public Date getTargetInTime() {
+    public String getTargetInTime() {
         return targetInTime;
     }
 
-    public void setTargetInTime(Date targetInTime) {
+    public void setTargetInTime(String targetInTime) {
         this.targetInTime = targetInTime;
     }
 
     @Basic
-    @Column(name = "target_out_time", nullable = true)
-    public Date getTargetOutTime() {
+    @Column(name = "target_out_time", nullable = false)
+    public String getTargetOutTime() {
         return targetOutTime;
     }
 
-    public void setTargetOutTime(Date targetOutTime) {
+    public void setTargetOutTime(String targetOutTime) {
         this.targetOutTime = targetOutTime;
+    }
+
+    @Basic
+    @Column(name = "hotel_name", nullable = false)
+    public String getHotelName() {
+        return hotelName;
+    }
+
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName;
     }
 }

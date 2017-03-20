@@ -1,7 +1,11 @@
 package service;
 
+import entity.BookRecord;
+import entity.Room;
 import entity.User;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,4 +25,10 @@ public interface UserService {
     boolean topUp(Integer user_id, Double money);
 
     Map<String, Object> getMyVip(Integer id);
+
+    List<Room> searchRooms(String beginTime, String endTime, byte roomType);
+
+    boolean bookRoom(Integer booker_id, Double price, Integer room_id, Integer hotel_id, byte room_style, byte pay_method, String target_in_time, String target_out_time,String hotel_name);
+
+    List<BookRecord> getMyOrder(Integer id);
 }

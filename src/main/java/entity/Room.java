@@ -15,6 +15,7 @@ public class Room {
     private double price;
     private Double specialPrice;
     private Timestamp specialTime;
+    private String hotelName;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -76,5 +77,16 @@ public class Room {
     public void setSpecialTime(Timestamp specialTime) {
         this.specialTime = specialTime;
     }
+
+    @Basic
+    @Column(name = "hotel_name", nullable = true)
+    public String getHotelName() {
+        return hotelName;
+    }
+
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName;
+    }
+
 
 }

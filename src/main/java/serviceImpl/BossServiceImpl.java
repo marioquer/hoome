@@ -44,13 +44,16 @@ public class BossServiceImpl implements BossService{
                 Room smallRoom = new Room();
                 Room bigRoom = new Room();
                 int new_id = hotelDao.maxId();
-                System.out.println(new_id+"new");
                 smallRoom.setHotelId(new_id);
                 smallRoom.setRoomStyle(small);
                 smallRoom.setPrice(apply.getSmallPrice());
+                smallRoom.setHotelName(hotel.getName());
+                smallRoom.setSpecialPrice(apply.getSmallPrice());
                 bigRoom.setHotelId(new_id);
                 bigRoom.setRoomStyle(big);
                 bigRoom.setPrice(apply.getBigPrice());
+                bigRoom.setHotelName(hotel.getName());
+                bigRoom.setSpecialPrice(apply.getBigPrice());
                 roomDao.addRoom(smallRoom);
                 roomDao.addRoom(bigRoom);
                 return true;
@@ -66,13 +69,11 @@ public class BossServiceImpl implements BossService{
         Apply apply = applyDao.getApplyById(id);
         apply.setStatus(approve);
         if (applyDao.updateApply(apply)){
-            Hotel hotel = new Hotel();
-            hotel.setId(id);
+            Hotel hotel = hotelDao.getHotelByOwner(apply.getOwnerId());
             hotel.setSmallNum(apply.getSmallNum());
             hotel.setBigNum(apply.getBigNum());
             hotel.setAddress(apply.getAddress());
             hotel.setPhone(apply.getPhone());
-            hotel.setOwnerId(apply.getOwnerId());
             hotel.setIntroduction(apply.getIntroduction());
             hotel.setName(apply.getName());
             if(hotelDao.updateHotel(hotel)){

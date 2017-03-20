@@ -23,34 +23,12 @@ public class HotelDaoImpl implements HotelDao {
 
     @Override
     public boolean addHotel(Hotel hotel) {
-        try {
-            session = HibernateUtil.currentSession();
-            Transaction tx = session.beginTransaction();
-            session.save(hotel);
-            tx.commit();
-            HibernateUtil.closeSession();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            HibernateUtil.closeSession();
-            return false;
-        }
+        return HibernateUtil.addObject(hotel);
     }
 
     @Override
     public boolean updateHotel(Hotel hotel) {
-        try {
-            session = HibernateUtil.currentSession();
-            Transaction tx = session.beginTransaction();
-            session.update(hotel);
-            tx.commit();
-            HibernateUtil.closeSession();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            HibernateUtil.closeSession();
-            return false;
-        }
+        return HibernateUtil.updateObject(hotel);
     }
 
     @Override

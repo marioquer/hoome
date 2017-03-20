@@ -52,4 +52,28 @@ public class RoomDaoImpl implements RoomDao {
             return false;
         }
     }
+
+    @Override
+    public boolean updateRoom(Room room) {
+        return HibernateUtil.updateObject(room);
+    }
+
+    @Override
+    public List<Room> getRoomsByType(byte type) {
+        try {
+            session = HibernateUtil.currentSession();
+            criteria = session.createCriteria(entity.Room.class);
+            criteria.add(Restrictions.eq("roomStyle", type));
+            List<Room> list = criteria.list();
+            if (list.size()!=0){
+                return list;
+            }else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            HibernateUtil.closeSession();
+            return null;
+        }
+    }
 }

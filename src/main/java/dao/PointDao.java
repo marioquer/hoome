@@ -9,4 +9,6 @@ import java.util.List;
  */
 public interface PointDao {
     List<Point> getPointRecords(Integer vip_id);
+
+    boolean addRecord(Point point);
 }

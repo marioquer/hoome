@@ -11,4 +11,8 @@ public interface RoomDao {
     List<Room> getRoomsByHotel(Integer hotel_id);
 
     boolean addRoom(Room room);
+
+    boolean updateRoom(Room room);
+
+    List<Room> getRoomsByType(byte type);
 }

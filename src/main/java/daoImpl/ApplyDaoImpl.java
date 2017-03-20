@@ -94,33 +94,11 @@ public class ApplyDaoImpl implements ApplyDao {
 
     @Override
     public boolean addApply(Apply apply) {
-        try {
-            session = HibernateUtil.currentSession();
-            Transaction tx = session.beginTransaction();
-            session.save(apply);
-            tx.commit();
-            HibernateUtil.closeSession();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            HibernateUtil.closeSession();
-            return false;
-        }
+        return HibernateUtil.addObject(apply);
     }
 
     @Override
     public boolean updateApply(Apply apply) {
-        try {
-            session = HibernateUtil.currentSession();
-            Transaction tx = session.beginTransaction();
-            session.update(apply);
-            tx.commit();
-            HibernateUtil.closeSession();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            HibernateUtil.closeSession();
-            return false;
-        }
+        return HibernateUtil.updateObject(apply);
     }
 }

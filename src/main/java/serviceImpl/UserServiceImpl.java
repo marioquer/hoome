@@ -1,12 +1,7 @@
 package serviceImpl;
 
-import dao.PointDao;
-import dao.UserDao;
-import dao.VipCardDao;
-import dao.VipRecordDao;
-import entity.User;
-import entity.VipCard;
-import entity.VipRecord;
+import dao.*;
+import entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import service.UserService;
@@ -14,10 +9,7 @@ import service.UserService;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by marioquer on 2017/3/13.
@@ -34,6 +26,12 @@ public class UserServiceImpl implements UserService {
     VipRecordDao vipRecordDao;
     @Autowired
     PointDao pointDao;
+    @Autowired
+    RoomDao roomDao;
+    @Autowired
+    BookRecordDao bookRecordDao;
+    @Autowired
+    VipLevelDao vipLevelDao;
 
     @Override
     public Map<String, Object> login(String phone, String password) {
@@ -119,11 +117,77 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Map<String, Object> getMyVip(Integer id) {
-        Map<String ,Object> result = new HashMap<String, Object>();
+        Map<String, Object> result = new HashMap<String, Object>();
         VipCard vipCard = vipCardDao.getVipCard(id);
-        result.put("vipCard",vipCard);
-        result.put("vipRecords",vipRecordDao.getRecords(vipCard.getId()));
-        result.put("point",pointDao.getPointRecords(vipCard.getId()));
+        result.put("vipCard", vipCard);
+        result.put("vipRecords", vipRecordDao.getRecords(vipCard.getId()));
+        result.put("point", pointDao.getPointRecords(vipCard.getId()));
         return result;
     }
+
+    @Override
+    public List<Room> searchRooms(String beginTime, String endTime, byte roomType) {
+        return roomDao.getRoomsByType(roomType);
+    }
+
+    @Override
+    public boolean bookRoom(Integer booker_id, Double price, Integer room_id, Integer hotel_id, byte room_style, byte pay_method, String target_in_time, String target_out_time,String hotel_name) {
+        //会员卡支付，则生成订单，扣除金额，增加积分
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        Timestamp expire = new Timestamp(System.currentTimeMillis() + ONE_YEAR_MILLI);
+
+        Double originPrice = price;
+        BookRecord bookRecord = new BookRecord();
+        bookRecord.setBookerId(booker_id);
+        bookRecord.setRoomStyle(room_style);
+        bookRecord.setStatus((byte) 0);
+        bookRecord.setTargetInTime(target_in_time);
+        bookRecord.setTargetOutTime(target_out_time);
+        bookRecord.setPayMethod(pay_method);
+        bookRecord.setHotelId(hotel_id);
+        bookRecord.setBookTime(timestamp);
+        VipCard vipCard = vipCardDao.getVipCardByUserId(booker_id);
+        VipLevel vipLevel = vipLevelDao.getVipLevel(vipCard.getLevel());
+        Double amount = originPrice * (vipLevel.getDiscount());
+        Double discount = originPrice - amount;
+        Integer point = (int) (price * vipLevel.getPointLevel());
+
+        Integer days = Integer.parseInt(target_out_time.split("-")[2]) - Integer.parseInt(target_in_time.split("-")[2]);
+
+        bookRecord.setAmount(amount * days);
+        bookRecord.setDiscount(discount * days);
+
+        Point pointRecord = new Point();
+        pointRecord.setVipId(vipCard.getId());
+        pointRecord.setPoint(point * days);
+        pointRecord.setBalance(vipCard.getPoint() + point * days);
+        pointRecord.setTime(timestamp);
+        pointRecord.setType((byte) 0); // 正常消费
+
+        vipCard.setBalance(vipCard.getBalance() - amount * days);
+        vipCard.setPoint(pointRecord.getBalance());
+        vipCard.setUpdatedAt(timestamp);
+        vipCard.setExpiredAt(expire);
+
+        VipRecord vipRecord = new VipRecord();
+        vipRecord.setVipId(vipCard.getId());
+        vipRecord.setInOut(0 - amount * days);
+        vipRecord.setBalance(vipCard.getBalance());
+        vipRecord.setType((byte) 0);
+        vipRecord.setCreatedAt(timestamp);
+
+        return bookRecordDao.addRecord(bookRecord) && vipCardDao.updateVip(vipCard) && pointDao.addRecord(pointRecord) && vipRecordDao.addRecord(vipRecord);
+    }
+
+    @Override
+    public List<BookRecord> getMyOrder(Integer id) {
+        return bookRecordDao.getRecordByUser(id);
+    }
+
+    public static void main(String[] args) {
+        Integer days = Integer.parseInt("2016-10-08".split("-")[2]) - Integer.parseInt("2016-10-03".split("-")[2]);
+        System.out.println(days);
+    }
+
+
 }

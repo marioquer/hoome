@@ -69,7 +69,37 @@
         var smallprice = $("#new_small_price").val();
         var bigprice = $("#new_big_price").val();
         var time = $("#expire_time").val();
-        alert(time);
+
+        alert(smallprice);
+
+        if (smallprice == "" || bigprice == "" || time == "") {
+            Materialize.toast("请输入完整信息！", 1200);
+        } else {
+            $.ajax({
+                method: "post",
+                url: "/landlord/publishSpecial",
+                async: false,
+                data: {
+                    "smallprice": smallprice,
+                    "bigprice": bigprice,
+                    "time": time,
+                    "user_id":id
+                },
+                success: function (result) {
+                    if (result=="success"){
+                        Materialize.toast('发布成功!', 1200,(function () {
+                           window.location.reload();
+                        })());
+                    }else{
+                        Materialize.toast('发布失败!', 1200);
+                    }
+                },
+                error: function () {
+                    Materialize.toast('请求出错!', 1200);
+                }
+            });
+
+        }
 
     }
 

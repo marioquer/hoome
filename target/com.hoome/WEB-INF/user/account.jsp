@@ -212,7 +212,7 @@
                 li.className = "collection-item blue-grey-text text-darken-1";
                 li.innerHTML = pointHtml;
                 li.getElementsByClassName("point-balance-record")[0].innerHTML = pointRecordsList[i].balance;
-                li.getElementsByClassName("point-in-out")[0].innerHTML = pointRecordsList[i].point;
+                li.getElementsByClassName("point-in-out")[0].innerHTML = pointRecordsList[i].point > 0 ? ("+" + pointRecordsList[i].point) : pointRecordsList[i].point;
                 if (pointRecordsList[i].type == 1)
                     li.getElementsByClassName("point-in-out-type")[0].innerHTML = "兑换现金";
                 $("#point_balance_container").append(li);
