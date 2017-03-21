@@ -1,3 +1,4 @@
+<%@ page import="entity.User" %>
 <%@ page language="java" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -119,12 +120,32 @@
         }
     });
 
-
-
     function cancel(obj) {
-        alert(obj.parentNode.parentNode.getElementsByClassName("record_id")[0].innerHTML);
-    }
+        var order_id = obj.parentNode.parentNode.getElementsByClassName("record_id")[0].innerHTML;
 
+        $.ajax({
+            method: "post",
+            url: "/user/cancelOrder",
+            async: false,
+            data: {
+                "order_id": order_id
+            },
+            success: function (result) {
+                if (result == "success") {
+                    Materialize.toast('tui成功!', 1200, (function () {
+                        window.location.reload();
+                    })());
+                } else {
+                    Materialize.toast('发布失败!', 1200);
+                }
+            },
+            error: function () {
+                Materialize.toast('请求出错!', 1200);
+            }
+        });
+
+
+    }
 
 </script>
 </body>

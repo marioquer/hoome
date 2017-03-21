@@ -25,7 +25,7 @@ public class BossPay {
         this.id = id;
     }
 
-    @Id
+    @Basic
     @Column(name = "record_id", nullable = false)
     public long getRecordId() {
         return recordId;

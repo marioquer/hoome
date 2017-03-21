@@ -47,7 +47,7 @@ public class RoomCustomer {
     }
 
     @Basic
-    @Column(name = "gender", nullable = false)
+    @Column(name = "gender", nullable = true)
     public byte getGender() {
         return gender;
     }

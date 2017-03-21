@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean bookRoom(Integer booker_id, Double price, Integer room_id, Integer hotel_id, byte room_style, byte pay_method, String target_in_time, String target_out_time,String hotel_name) {
+    public boolean bookRoom(Integer booker_id, Double price, Integer room_id, Integer hotel_id, byte room_style, byte pay_method, String target_in_time, String target_out_time, String hotel_name) {
         //会员卡支付，则生成订单，扣除金额，增加积分
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         Timestamp expire = new Timestamp(System.currentTimeMillis() + ONE_YEAR_MILLI);
@@ -145,7 +145,9 @@ public class UserServiceImpl implements UserService {
         bookRecord.setTargetOutTime(target_out_time);
         bookRecord.setPayMethod(pay_method);
         bookRecord.setHotelId(hotel_id);
+        bookRecord.setHotelName(hotel_name);
         bookRecord.setBookTime(timestamp);
+        bookRecord.setIsPaid((byte) 0);
         VipCard vipCard = vipCardDao.getVipCardByUserId(booker_id);
         VipLevel vipLevel = vipLevelDao.getVipLevel(vipCard.getLevel());
         Double amount = originPrice * (vipLevel.getDiscount());
@@ -185,9 +187,66 @@ public class UserServiceImpl implements UserService {
     }
 
     public static void main(String[] args) {
-        Integer days = Integer.parseInt("2016-10-08".split("-")[2]) - Integer.parseInt("2016-10-03".split("-")[2]);
-        System.out.println(days);
+//        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+//        Timestamp b = new Timestamp(System.currentTimeMillis() + 50);
+//        System.out.println(timestamp.after(b));
     }
 
+    @Override
+    public boolean cancelOrder(Long order_id) {
+        //状态改，还钱还积分
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+        BookRecord bookRecord = bookRecordDao.getRecord(order_id);
+        bookRecord.setStatus((byte) -1);
+        VipCard vipCard = vipCardDao.getVipCardByUserId(bookRecord.getBookerId());
+
+        vipCard.setBalance(vipCard.getBalance() + bookRecord.getAmount() * 0.9);
+        vipCard.setPoint(vipCard.getPoint() - (int) bookRecord.getAmount());
+
+        Point pointRecord = new Point();
+        pointRecord.setVipId(vipCard.getId());
+        pointRecord.setPoint(0 - (int) bookRecord.getAmount());
+        pointRecord.setBalance(vipCard.getPoint());
+        pointRecord.setTime(timestamp);
+        pointRecord.setType((byte) 0); // 正常消费
+
+        VipRecord vipRecord = new VipRecord();
+        vipRecord.setVipId(vipCard.getId());
+        vipRecord.setInOut(bookRecord.getAmount() * 0.9);
+        vipRecord.setBalance(vipCard.getBalance());
+        vipRecord.setType((byte) 0);
+        vipRecord.setCreatedAt(timestamp);
+
+        return bookRecordDao.updateRecord(bookRecord) && vipCardDao.updateVip(vipCard) && pointDao.addRecord(pointRecord) && vipRecordDao.addRecord(vipRecord);
+    }
+
+    @Override
+    public boolean suspendCard(Integer id) {
+        User user = userDao.getUser(id);
+        user.setIsVip((byte) 3);
+        VipCard vipCard = vipCardDao.getVipCard(id);
+        vipCard.setStatus((byte) 3);
+        return vipCardDao.updateVip(vipCard) && userDao.updateUser(user);
+    }
+
+    @Override
+    public boolean reactiveCard(Integer id) {
+        User user = userDao.getUser(id);
+        user.setIsVip((byte) 2);
+        VipCard vipCard = vipCardDao.getVipCard(id);
+        vipCard.setStatus((byte) 2);
+        return vipCardDao.updateVip(vipCard) && userDao.updateUser(user);
+    }
+
+    @Override
+    public void checkVip() {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        VipCard vipCard = vipCardDao.getVipCard(1);
+        if (vipCard.getExpiredAt().before(timestamp)) {
+            vipCard.setStatus((byte) 3);
+            vipCardDao.updateVip(vipCard);
+        }
+    }
 
 }

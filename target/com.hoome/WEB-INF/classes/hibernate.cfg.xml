@@ -25,5 +25,7 @@
         <mapping class="entity.VipCard"/>
         <mapping class="entity.VipLevel"/>
         <mapping class="entity.VipRecord"/>
+        <mapping class="entity.BossPay"/>
+
     </session-factory>
 </hibernate-configuration>

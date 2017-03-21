@@ -24,13 +24,150 @@
 </header>
 
 <main>
-    <div class="container" style="background: red;height: 1000px;"></div>
-    <%@ include file="../common/footer.jsp" %>
+    <div class="container" style="min-height: 1000px;">
+        <table class="highlight">
+            <thead>
+            <tr>
+                <th>订单号</th>
+                <th>客栈id</th>
+                <th>房间类型</th>
+                <th>总价</th>
+                <th>入住时间</th>
+                <th>退房时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="record_container">
+            <tr class="none" id="record_pattern">
+                <td class="record_id">1</td>
+                <td class="hotel_id">1</td>
+                <td class="room_style">单人房</td>
+                <td class="amount">400</td>
+                <td class="in_time">-</td>
+                <td class="out_time">-</td>
+                <td>
+                    <a class="btn blue" onclick="pay(this.parentNode.parentNode)">结算</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+        <div style="position: relative; margin-top: 60px;">
+            <h4 style="display: inline;">统计信息</h4>
+        </div>
+
+        <table class="highlight">
+            <thead>
+            <tr>
+                <th>会员预定数</th>
+                <th>会员退订数</th>
+                <th>会员消费总额</th>
+                <th>hostel world总营收</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="" id="statistics">
+                <td id="vip_book_num">1</td>
+                <td id="vip_cancel_num">1</td>
+                <td id="vip_money_sum">1</td>
+                <td id="all_sum">1</td>
+            </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+    <%--<%@ include file="../common/footer.jsp" %>--%>
 </main>
 
 <!--  Scripts-->
 <script src="/js/jquery.min.js"></script>
 <script src="/js/materialize.js"></script>
 <script src="/js/init.js"></script>
+<script>
+    $.ajax({
+        method: "post",
+        url: "/boss/getHotelOrder",
+        async: false,
+        dataType: "json",
+        success: function (result) {
+            var recordHtml = $("#record_pattern").html();
+            var vip_book_num = 0, vip_cancel_num = 0, vip_money_sum = 0.0, all_sum = 0.0;
+
+            //all order record
+            for (var i = 0; i < result.length; i++) {
+                if (result[i].bookerId != 8) {
+                    if (result[i].status == -1) {
+                        vip_cancel_num++;
+
+                    } else if (result[i].status == 2) {
+                        vip_book_num++;
+                        vip_money_sum += result[i].amount;
+                        if (result[i].isPaid == 1)
+                            all_sum += result[i].amount * 0.2;
+
+                        var tr = document.createElement("tr");
+                        tr.innerHTML = recordHtml;
+                        tr.getElementsByClassName("record_id")[0].innerHTML = result[i].id;
+                        tr.getElementsByClassName("hotel_id")[0].innerHTML = result[i].hotelId;
+                        tr.getElementsByClassName("room_style")[0].innerHTML = result[i].roomStyle == 0 ? "单人房" : "双人房";
+                        tr.getElementsByClassName("in_time")[0].innerHTML = result[i].inTime == null ? "-" : new Date(result[i].inTime).toLocaleString();
+                        tr.getElementsByClassName("out_time")[0].innerHTML = result[i].outTime == null ? "-" : new Date(result[i].outTime).toLocaleString();
+                        tr.getElementsByClassName("amount")[0].innerHTML = result[i].amount;
+                        switch (result[i].isPaid) {
+                            case 0:
+                                break;
+                            case 1:
+                                tr.getElementsByClassName("btn")[0].className = "btn disabled";
+                                tr.getElementsByClassName("btn")[0].innerHTML = "已付";
+                                tr.getElementsByClassName("btn")[0].onclick = null;
+                                break;
+                        }
+                        $("#record_container").append(tr);
+                    } else {
+                        vip_book_num++;
+                        vip_money_sum += result[i].amount;
+                    }
+                }
+            }
+
+            $("#vip_book_num").html(vip_book_num);
+            $("#vip_cancel_num").html(vip_cancel_num);
+            $("#vip_money_sum").html(vip_money_sum);
+            $("#all_sum").html(all_sum);
+        },
+        error: function () {
+            Materialize.toast('请求出错!', 1200);
+        }
+    });
+
+    function pay(obj) {
+        var record_id = obj.getElementsByClassName("record_id")[0].innerHTML;
+
+        $.ajax({
+            method: "post",
+            url: "/boss/pay",
+            async: false,
+            data: {
+                "record_id": record_id,
+            },
+            success: function (result) {
+                if (result == "success") {
+                    Materialize.toast('结算成功!', 1200, (function () {
+                        window.location.reload();
+                    })());
+                } else {
+                    Materialize.toast('结算失败!', 1200);
+                }
+            },
+            error: function () {
+                Materialize.toast('请求出错!', 1200);
+            }
+        });
+    }
+
+
+</script>
 </body>
 </html>

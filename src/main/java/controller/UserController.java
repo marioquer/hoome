@@ -90,6 +90,7 @@ public class UserController {
     public String newVip(Integer id, HttpServletRequest request) {
         if (userService.newVip(id)) {
             User user = (User) request.getSession().getAttribute("user");
+            request.getSession().removeAttribute("user");
             user.setIsVip((byte) 1);
             request.getSession().setAttribute("user", user);
             return "success";
@@ -103,6 +104,7 @@ public class UserController {
     public String activateVip(Integer id, Double balance, String bank_card, HttpServletRequest request) {
         if (userService.activateVip(id, balance, bank_card)) {
             User user = (User) request.getSession().getAttribute("user");
+            request.getSession().removeAttribute("user");
             user.setIsVip((byte) 2);
             request.getSession().setAttribute("user", user);
             return "success";
@@ -135,8 +137,8 @@ public class UserController {
 
     @RequestMapping(value = "/book", method = RequestMethod.POST)
     @ResponseBody
-    public String bookRoom(Integer booker_id, Double price, Integer room_id, Integer hotel_id, byte room_style, byte pay_method, String target_in_time, String target_out_time,String hotel_name) {
-        if (userService.bookRoom(booker_id, price, room_id, hotel_id, room_style, pay_method, target_in_time, target_out_time,hotel_name)) {
+    public String bookRoom(Integer booker_id, Double price, Integer room_id, Integer hotel_id, byte room_style, byte pay_method, String target_in_time, String target_out_time, String hotel_name) {
+        if (userService.bookRoom(booker_id, price, room_id, hotel_id, room_style, pay_method, target_in_time, target_out_time, hotel_name)) {
             return "success";
         } else {
             return "fail";
@@ -149,7 +151,40 @@ public class UserController {
         return userService.getMyOrder(id);
     }
 
+    @RequestMapping(value = "/cancelOrder", method = RequestMethod.POST)
+    @ResponseBody
+    public String cancelOrder(Long order_id) {
+        return userService.cancelOrder(order_id) ? "success" : "fail";
+    }
 
+
+    @RequestMapping(value = "/suspendCard", method = RequestMethod.POST)
+    @ResponseBody
+    public String suspendCard(Integer user_id, HttpServletRequest request) {
+        if (userService.suspendCard(user_id)) {
+            User user = (User) request.getSession().getAttribute("user");
+            request.getSession().removeAttribute("user");
+            user.setIsVip((byte) 3);
+            request.getSession().setAttribute("user", user);
+            return "success";
+        } else {
+            return "fail";
+        }
+    }
+
+    @RequestMapping(value = "/reactiveCard", method = RequestMethod.POST)
+    @ResponseBody
+    public String reactiveCard(Integer user_id, HttpServletRequest request) {
+        if (userService.reactiveCard(user_id)) {
+            User user = (User) request.getSession().getAttribute("user");
+            request.getSession().removeAttribute("user");
+            user.setIsVip((byte) 2);
+            request.getSession().setAttribute("user", user);
+            return "success";
+        } else {
+            return "fail";
+        }
+    }
 
     //test
     @RequestMapping(value = "/showSession", method = RequestMethod.GET)

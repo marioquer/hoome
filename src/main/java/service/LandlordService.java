@@ -1,8 +1,10 @@
 package service;
 
+import entity.BookRecord;
 import entity.Room;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,5 +35,14 @@ public interface LandlordService {
     List<Room> getTargetRooms(Timestamp beginTime, Timestamp endTime, byte roomType);
 
     boolean publishSpecial(Integer user_id, String time, Double smallPrice, Double bigPrice);
+
+    List<BookRecord> getHotelOrder(Integer id);
+
+    boolean checkin(Long record_id, ArrayList<Map<String, String>> peoples);
+
+    boolean cashCheckin(Integer owner_id, ArrayList<Map<String, String>> peoples, byte room_style, Double price);
+
+    boolean checkout(Long record_id);
+
 
 }

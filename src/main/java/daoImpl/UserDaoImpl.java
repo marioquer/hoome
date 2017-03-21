@@ -27,7 +27,6 @@ public class UserDaoImpl implements UserDao {
             User user = new User();
             User isExist = this.getUser(phone);
             if(isExist==null){
-                System.out.println("卧槽");
                 byte isVip = 0;
                 user.setPhone(phone);
                 user.setPassword(password);
@@ -39,7 +38,6 @@ public class UserDaoImpl implements UserDao {
                 HibernateUtil.closeSession();
                 return true;
             }else{
-                System.out.println("chu");
                 HibernateUtil.closeSession();
                 return false;
             }

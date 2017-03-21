@@ -1,28 +1,30 @@
 package serviceImpl;
 
-import dao.ApplyDao;
-import dao.HotelDao;
-import dao.RoomDao;
-import entity.Apply;
-import entity.Hotel;
-import entity.Room;
+import dao.*;
+import entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import service.BossService;
 
+import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created by marioquer on 2017/3/18.
  */
 @Service
-public class BossServiceImpl implements BossService{
+public class BossServiceImpl implements BossService {
     @Autowired
     ApplyDao applyDao;
     @Autowired
     HotelDao hotelDao;
     @Autowired
     RoomDao roomDao;
+    @Autowired
+    BookRecordDao bookRecordDao;
+    @Autowired
+    BossPayDao bossPayDao;
 
     @Override
     public boolean approveNew(Integer id) {
@@ -30,7 +32,7 @@ public class BossServiceImpl implements BossService{
         byte approve = 1;
         Apply apply = applyDao.getApplyById(id);
         apply.setStatus(approve);
-        if (applyDao.updateApply(apply)){
+        if (applyDao.updateApply(apply)) {
             Hotel hotel = new Hotel();
             hotel.setSmallNum(apply.getSmallNum());
             hotel.setBigNum(apply.getBigNum());
@@ -39,8 +41,8 @@ public class BossServiceImpl implements BossService{
             hotel.setOwnerId(apply.getOwnerId());
             hotel.setIntroduction(apply.getIntroduction());
             hotel.setName(apply.getName());
-            if(hotelDao.addHotel(hotel)){
-                byte small=0,big=1;
+            if (hotelDao.addHotel(hotel)) {
+                byte small = 0, big = 1;
                 Room smallRoom = new Room();
                 Room bigRoom = new Room();
                 int new_id = hotelDao.maxId();
@@ -68,7 +70,7 @@ public class BossServiceImpl implements BossService{
         byte approve = 1;
         Apply apply = applyDao.getApplyById(id);
         apply.setStatus(approve);
-        if (applyDao.updateApply(apply)){
+        if (applyDao.updateApply(apply)) {
             Hotel hotel = hotelDao.getHotelByOwner(apply.getOwnerId());
             hotel.setSmallNum(apply.getSmallNum());
             hotel.setBigNum(apply.getBigNum());
@@ -76,7 +78,7 @@ public class BossServiceImpl implements BossService{
             hotel.setPhone(apply.getPhone());
             hotel.setIntroduction(apply.getIntroduction());
             hotel.setName(apply.getName());
-            if(hotelDao.updateHotel(hotel)){
+            if (hotelDao.updateHotel(hotel)) {
                 return true;
             }
         }
@@ -84,10 +86,28 @@ public class BossServiceImpl implements BossService{
         return false;
     }
 
-
-
     @Override
     public Map<String, Object> getAllApply() {
         return applyDao.getSuspendApply();
+    }
+
+    @Override
+    public List<BookRecord> getHotelOrder() {
+        return bookRecordDao.getRecords();
+    }
+
+    @Override
+    public boolean pay(Long record_id) {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        BookRecord bookRecord = bookRecordDao.getRecord(record_id);
+        bookRecord.setIsPaid((byte) 1);
+        Double amount = bookRecord.getAmount();
+
+        BossPay bossPay = new BossPay();
+        bossPay.setCreatedAt(timestamp);
+        bossPay.setMoney(amount * 0.8);
+        bossPay.setRecordId(record_id);
+
+        return bookRecordDao.updateRecord(bookRecord) && bossPayDao.addBossPay(bossPay);
     }
 }

@@ -76,7 +76,7 @@
             </div>
         </div>
         <%
-        } else {
+        } else if (user.getIsVip() == (byte) 2) {
         %>
 
         <div class="row">
@@ -100,6 +100,8 @@
                             <label for="topUp">充值金额</label>
                         </div>
                         <div class="margin-top-10" style="position: absolute;right: 20px; bottom: 40px;">
+                            <a onclick="suspend(${sessionScope.get("user").getId()})"
+                               class="btn blue-grey waves-effect waves-light">停用此卡</a>
                             <a onclick="topUp(${sessionScope.get("user").getId()})"
                                class="btn teal waves-effect waves-light">立即充值</a>
                         </div>
@@ -113,12 +115,13 @@
                 <div class="card white">
                     <ul class="collection with-header">
                         <li class="collection-header blue-grey-text text-darken-1"><h4 style="font-size: 30px;">
-                            余额变动记录</h4></li>
+                            余额变动记录</h4><span style="position: absolute;right: 20px;top: 40px;">总计：<span id="all_in_out">3000</span></span>
+                        </li>
                         <div id="money_balance_container">
                             <li id="money_record_pattern" class="collection-item blue-grey-text text-darken-1 none">
                                 <span class="money-balance-record">10000</span>
                                 <span class="badge teal white-text in-out">+1000</span>
-                                <span class="badge in-out-type" style="right: 80px;">充值&消费</span>
+                                <span class="badge in-out-type" style="right: 80px;">充值/消费/退订</span>
                             </li>
                         </div>
                     </ul>
@@ -131,12 +134,13 @@
                 <div class="card white">
                     <ul class="collection with-header">
                         <li class="collection-header blue-grey-text text-darken-1"><h4 style="font-size: 30px;">
-                            积分变动记录</h4></li>
+                            积分变动记录</h4><span style="position: absolute;right: 20px;top: 40px;">总计：<span
+                                id="all_point_in_out">3000</span></span></li>
                         <div id="point_balance_container">
                             <li id="point_record_pattern" class="collection-item blue-grey-text text-darken-1 none">
                                 <span class="point-balance-record">10000</span>
                                 <span class="badge teal white-text point-in-out">+1000</span>
-                                <span class="badge point-in-out-type" style="right: 80px;">消费</span>
+                                <span class="badge point-in-out-type" style="right: 80px;">消费/退订</span>
                             </li>
                         </div>
                     </ul>
@@ -145,6 +149,17 @@
         </div>
 
 
+        <%} else {%>
+        <div class="row margin-top-20 new">
+            <div class="col s12 m12">
+                <div class="card-panel blue-grey">
+          <span class="white-text">您的会员卡已被停用，点击按钮立即激活
+          </span>
+                </div>
+            </div>
+            <a class="margin-left-10 waves-effect waves-light btn teal"
+               onclick="reactiveCard(${sessionScope.get("user").getId()})">立即重启</a>
+        </div>
         <%}%>
     </div>
 
@@ -180,6 +195,8 @@
                 idString = "0" + idString;
             }
 
+            var allInOut = 0.0, allPointInOut = 0;
+
             //card info
             $("#card_id").html(idString);
             $("#expire_time").html(new Date(result.vipCard.createdAt).toLocaleString());
@@ -204,6 +221,8 @@
                 if (vipRecordsList[i].type == 1)
                     li.getElementsByClassName("in-out-type")[0].innerHTML = "积分兑换";
                 $("#money_balance_container").append(li);
+
+                allInOut += vipRecordsList[i].inOut;
             }
 
             //all point record
@@ -216,13 +235,67 @@
                 if (pointRecordsList[i].type == 1)
                     li.getElementsByClassName("point-in-out-type")[0].innerHTML = "兑换现金";
                 $("#point_balance_container").append(li);
+
+                allPointInOut += pointRecordsList[i].point;
             }
+
+            $("#all_in_out").html(allInOut > 0 ? ("+" + allInOut) : allInOut);
+            $("#all_point_in_out").html(allPointInOut > 0 ? ("+" + allPointInOut) : allPointInOut);
+
         },
         error: function () {
             Materialize.toast('请求出错!', 1200);
         }
     });
     <%}%>
+
+    function suspend(id) {
+        $.ajax({
+            method: "post",
+            url: "/user/suspendCard",
+            async: false,
+            data: {
+                "user_id": id
+            },
+            success: function (result) {
+                if (result == "success") {
+                    Materialize.toast('停用成功!', 1200, (function () {
+                        window.location.reload();
+                    })());
+                } else {
+                    Materialize.toast('停用失败!', 1200);
+                }
+            },
+            error: function () {
+                Materialize.toast('请求出错!', 1200);
+            }
+        });
+    }
+
+    function reactiveCard(id) {
+        $.ajax({
+            method: "post",
+            url: "/user/reactiveCard",
+            async: false,
+            data: {
+                "user_id": id
+            },
+            success: function (result) {
+                if (result == "success") {
+                    Materialize.toast('重启成功!', 1200, (function () {
+                        window.location.reload();
+                    })());
+                } else {
+                    Materialize.toast('重启失败!', 1200);
+                }
+            },
+            error: function () {
+                Materialize.toast('请求出错!', 1200);
+            }
+        });
+    }
+
+
 </script>
 </body>
 </html>

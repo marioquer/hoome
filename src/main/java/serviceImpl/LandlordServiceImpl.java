@@ -1,21 +1,15 @@
 package serviceImpl;
 
-import dao.ApplyDao;
-import dao.HotelDao;
-import dao.RoomDao;
-import entity.Apply;
-import entity.Hotel;
-import entity.Room;
+import dao.*;
+import entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import service.LandlordService;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by marioquer on 2017/3/17.
@@ -28,6 +22,10 @@ public class LandlordServiceImpl implements LandlordService {
     HotelDao hotelDao;
     @Autowired
     RoomDao roomDao;
+    @Autowired
+    BookRecordDao bookRecordDao;
+    @Autowired
+    RoomCustomerDao roomCustomerDao;
 
     @Override
     public boolean createHotel(Integer owner_id, String phone, String name, Integer small_num, Integer big_num, String address, String introduction, Double big_price, Double small_price) {
@@ -65,7 +63,7 @@ public class LandlordServiceImpl implements LandlordService {
         apply.setBigNum(big_num);
         apply.setAddress(address);
         apply.setIntroduction(introduction);
-        apply.setType((byte)1);
+        apply.setType((byte) 1);
         apply.setStatus(bit);
         apply.setApplyTime(time);
         System.out.println(apply.getName());
@@ -121,16 +119,82 @@ public class LandlordServiceImpl implements LandlordService {
         Room one = rooms.get(0);
         Room two = rooms.get(1);
         if (one.getRoomStyle() == (byte) 0) {
-            System.out.println("bbb");
             one.setSpecialPrice(smallPrice);
             two.setSpecialPrice(bigPrice);
         } else {
-            System.out.println("ccc");
             one.setSpecialPrice(bigPrice);
             two.setSpecialPrice(smallPrice);
         }
-        System.out.println(smallPrice+"service");
-        System.out.println(one.getSpecialPrice());
         return roomDao.updateRoom(one) && roomDao.updateRoom(two);
+    }
+
+    @Override
+    public List<BookRecord> getHotelOrder(Integer id) {
+        Hotel hotel = hotelDao.getHotelByOwner(id);
+        return bookRecordDao.getRecordByHoterOwner(hotel.getId());
+    }
+
+    @Override
+    public boolean checkin(Long record_id, ArrayList<Map<String, String>> peoples) {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        BookRecord bookRecord = bookRecordDao.getRecord(record_id);
+        bookRecord.setInTime(timestamp);
+        bookRecord.setStatus((byte) 1);
+        boolean result = true;
+
+        System.out.println(peoples.size() + "service");
+
+        for (int i = 0; i < peoples.size(); i++) {
+            RoomCustomer roomCustomer = new RoomCustomer();
+            roomCustomer.setRecordId(record_id);
+            roomCustomer.setName(peoples.get(i).get("name"));
+            roomCustomer.setIdentityId(peoples.get(i).get("identity_id"));
+            result = result && roomCustomerDao.addCustomer(roomCustomer);
+        }
+
+        return result && bookRecordDao.updateRecord(bookRecord);
+    }
+
+    @Override
+    public boolean cashCheckin(Integer owner_id, ArrayList<Map<String, String>> peoples, byte room_style, Double price) {
+        Hotel hotel = hotelDao.getHotelByOwner(owner_id);
+        boolean result = true;
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+        BookRecord bookRecord = new BookRecord();
+        bookRecord.setBookerId(8);
+        bookRecord.setDiscount(0);
+        bookRecord.setAmount(price);
+        bookRecord.setHotelId(hotel.getId());
+        bookRecord.setRoomStyle(room_style);
+        bookRecord.setStatus((byte) 1);
+        bookRecord.setBookTime(timestamp);
+        bookRecord.setInTime(timestamp);
+        bookRecord.setPayMethod((byte) 0);
+        bookRecord.setTargetInTime(timestamp.toString());
+        bookRecord.setTargetOutTime(timestamp.toString());
+        bookRecord.setIsPaid((byte) 0);
+        result = result && bookRecordDao.addRecord(bookRecord);
+
+        Long record_id = bookRecordDao.maxId();
+
+        for (int i = 0; i < peoples.size(); i++) {
+            RoomCustomer roomCustomer = new RoomCustomer();
+            roomCustomer.setRecordId(record_id);
+            roomCustomer.setName(peoples.get(i).get("name"));
+            roomCustomer.setIdentityId(peoples.get(i).get("identity_id"));
+            result = result && roomCustomerDao.addCustomer(roomCustomer);
+        }
+
+        return result;
+    }
+
+    @Override
+    public boolean checkout(Long record_id) {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        BookRecord bookRecord = bookRecordDao.getRecord(record_id);
+        bookRecord.setOutTime(timestamp);
+        bookRecord.setStatus((byte) 2);
+        return bookRecordDao.updateRecord(bookRecord);
     }
 }

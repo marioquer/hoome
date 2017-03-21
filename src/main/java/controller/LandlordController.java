@@ -1,5 +1,6 @@
 package controller;
 
+import entity.BookRecord;
 import entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -7,8 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import service.LandlordService;
+import service.UserService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -68,14 +72,38 @@ public class LandlordController {
 
     @RequestMapping(value = "/publishSpecial", method = RequestMethod.POST)
     @ResponseBody
-    public String publishSpecial(Integer user_id, String time,Double smallprice,Double bigprice) {
+    public String publishSpecial(Integer user_id, String time, Double smallprice, Double bigprice) {
         System.out.println(smallprice);
         System.out.println(bigprice);
-        if(landlordService.publishSpecial(user_id,time,smallprice,bigprice)){
+        if (landlordService.publishSpecial(user_id, time, smallprice, bigprice)) {
             return "success";
-        }else{
+        } else {
             return "fail";
         }
+    }
+
+    @RequestMapping(value = "/getHotelOrder", method = RequestMethod.POST)
+    @ResponseBody
+    public List<BookRecord> getHotelOrder(Integer id) {
+        return landlordService.getHotelOrder(id);
+    }
+
+    @RequestMapping(value = "/checkin", method = RequestMethod.POST)
+    @ResponseBody
+    public String getHotelOrder(Long record_id, ArrayList<Map<String, String>> peoples) {
+        return landlordService.checkin(record_id, peoples) ? "success" : "fail";
+    }
+
+    @RequestMapping(value = "/cashCheckin", method = RequestMethod.POST)
+    @ResponseBody
+    public String getHotelOrder(Integer owner_id, ArrayList<Map<String, String>> peoples, byte room_style, Double price) {
+        return landlordService.cashCheckin(owner_id, peoples, room_style, price) ? "success" : "fail";
+    }
+
+    @RequestMapping(value = "/checkout", method = RequestMethod.POST)
+    @ResponseBody
+    public String checkout(Long record_id) {
+        return landlordService.checkout(record_id) ? "success" : "fail";
     }
 
 

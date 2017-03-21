@@ -19,7 +19,7 @@
     </li>
     <li class="margin-top-10"><a class="waves-effect" href="/user/order"><i class="material-icons">shopping_cart</i>我的订单</a></li>
     <li><a class="waves-effect" href="/user/account"><i class="material-icons">person_pin</i>会员账户</a></li>
-    <li><a class="waves-effect" href="/user/statistics"><i class="material-icons">assessment</i>统计明细</a></li>
+    <%--<li><a class="waves-effect" href="/user/statistics"><i class="material-icons">assessment</i>统计明细</a></li>--%>
     <li>
         <div class="divider"></div>
     </li>

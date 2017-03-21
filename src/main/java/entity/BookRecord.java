@@ -25,6 +25,17 @@ public class BookRecord {
     private String targetInTime;
     private String targetOutTime;
     private String hotelName;
+    private Byte isPaid;
+
+    @Basic
+    @Column(name = "isPaid", nullable = false)
+    public byte getIsPaid() {
+        return isPaid;
+    }
+
+    public void setIsPaid(byte isPaid) {
+        this.isPaid = isPaid;
+    }
 
     @Id
     @Column(name = "id", nullable = false)
@@ -138,7 +149,7 @@ public class BookRecord {
     }
 
     @Basic
-    @Column(name = "target_in_time", nullable = false)
+    @Column(name = "target_in_time", nullable = false, length = 60)
     public String getTargetInTime() {
         return targetInTime;
     }
@@ -148,7 +159,7 @@ public class BookRecord {
     }
 
     @Basic
-    @Column(name = "target_out_time", nullable = false)
+    @Column(name = "target_out_time", nullable = true, length = 60)
     public String getTargetOutTime() {
         return targetOutTime;
     }
@@ -158,7 +169,7 @@ public class BookRecord {
     }
 
     @Basic
-    @Column(name = "hotel_name", nullable = false)
+    @Column(name = "hotel_name", nullable = true, length = 20)
     public String getHotelName() {
         return hotelName;
     }
@@ -166,4 +177,6 @@ public class BookRecord {
     public void setHotelName(String hotelName) {
         this.hotelName = hotelName;
     }
+
+
 }

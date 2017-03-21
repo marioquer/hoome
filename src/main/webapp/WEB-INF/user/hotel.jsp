@@ -184,7 +184,7 @@
                         window.location.href = "/user/order";
                     })());
                 } else {
-
+                    Materialize.toast('预定失败!', 1200);
                 }
             },
             error: function () {
