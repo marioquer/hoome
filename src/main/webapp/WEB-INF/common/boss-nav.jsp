@@ -14,8 +14,8 @@
         <div class="divider"></div>
     </li>
     <li class="margin-top-10"><a href="/boss/apply" class="waves-effect"><i class="material-icons">done_all</i>审批申请</a></li>
-    <li><a href="/boss/pay" class="waves-effect"><i class="material-icons">payment</i>客栈结算</a></li>
-    <li><a class="waves-effect" href="/boss/statistics"><i class="material-icons">assessment</i>统计明细</a></li>
+    <li><a href="/boss/pay" class="waves-effect"><i class="material-icons">payment</i>结算和统计</a></li>
+    <%--<li><a class="waves-effect" href="/boss/statistics"><i class="material-icons">assessment</i>统计明细</a></li>--%>
     <li>
         <div class="divider"></div>
     </li>

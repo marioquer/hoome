@@ -11,7 +11,7 @@
     </li>
     <li class="margin-top-10"><a href="/landlord/hotel-info" class="waves-effect"><i class="material-icons">business</i>客栈信息</a></li>
     <li><a href="/landlord/special" class="waves-effect"><i class="material-icons">stars</i>发布优惠</a></li>
-    <li><a class="waves-effect" href="/landlord/check-in-out"><i class="material-icons">shopping_cart</i>住宿登记</a></li>
+    <li><a class="waves-effect" href="/landlord/check-in-out"><i class="material-icons">shopping_cart</i>登记和统计</a></li>
     <%--<li><a class="waves-effect" href="/landlord/statistics"><i class="material-icons">assessment</i>本店统计</a></li>--%>
     <li>
         <div class="divider"></div>

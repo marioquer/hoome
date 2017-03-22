@@ -16,7 +16,7 @@
 <header>
     <nav class="top-nav blue-grey darken-2">
         <div class="container">
-            <div class="nav-wrapper"><a class="page-title">客栈结算</a></div>
+            <div class="nav-wrapper"><a class="page-title">结算和统计</a></div>
         </div>
     </nav>
     <%@ include file="../common/boss-nav.jsp" %>
@@ -24,7 +24,7 @@
 </header>
 
 <main>
-    <div class="container" style="min-height: 1000px;">
+    <div class="container" style="min-height: 500px;">
         <table class="highlight">
             <thead>
             <tr>
@@ -75,17 +75,24 @@
             </tr>
             </tbody>
         </table>
-
-
+        <div class="divider"></div>
+        <div id="chart" style="height: 300px; margin-top: 80px;"></div>
     </div>
     <%--<%@ include file="../common/footer.jsp" %>--%>
 </main>
 
 <!--  Scripts-->
 <script src="/js/jquery.min.js"></script>
+<script src="/js/echarts.min.js"></script>
 <script src="/js/materialize.js"></script>
 <script src="/js/init.js"></script>
 <script>
+    var vip_book_num = 0, vip_cancel_num = 0, vip_money_sum = 0.0, all_sum = 0.0;
+    var hotel = new Array();
+    var data = new Array();
+    var index = 0;
+
+
     $.ajax({
         method: "post",
         url: "/boss/getHotelOrder",
@@ -93,8 +100,6 @@
         dataType: "json",
         success: function (result) {
             var recordHtml = $("#record_pattern").html();
-            var vip_book_num = 0, vip_cancel_num = 0, vip_money_sum = 0.0, all_sum = 0.0;
-
             //all order record
             for (var i = 0; i < result.length; i++) {
                 if (result[i].bookerId != 8) {
@@ -102,6 +107,14 @@
                         vip_cancel_num++;
 
                     } else if (result[i].status == 2) {
+                        index = findNum(hotel, result[i].hotelName);
+                        if (index != -1) {
+                            data[index] = data[index]+1;
+                        } else {
+                            hotel.push(result[i].hotelName);
+                            data.push(1);
+                        }
+
                         vip_book_num++;
                         vip_money_sum += result[i].amount;
                         if (result[i].isPaid == 1)
@@ -126,6 +139,14 @@
                         }
                         $("#record_container").append(tr);
                     } else {
+                        index = findNum(hotel, result[i].hotelName);
+                        if (index != -1) {
+                            data[index] = data[index]+1;
+                        } else {
+                            hotel.push(result[i].hotelName);
+                            data.push(1);
+                        }
+
                         vip_book_num++;
                         vip_money_sum += result[i].amount;
                     }
@@ -165,6 +186,62 @@
                 Materialize.toast('请求出错!', 1200);
             }
         });
+    }
+
+
+    var chart = echarts.init(document.getElementById('chart'));
+
+    option = {
+        color: ['#3398DB'],
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        legend: {
+            data:['各酒店预定数'],
+        },
+        grid: {
+            left: '0%',
+            right: '0%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [
+            {
+                type: 'category',
+                data: hotel,
+                axisTick: {
+                    alignWithLabel: true
+                }
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value'
+            }
+        ],
+        series: [
+            {
+                name: '各酒店预定数',
+                type: 'bar',
+                barWidth: '60%',
+                data: data
+            }
+        ]
+    };
+
+    chart.setOption(option);
+
+
+    function findNum(array, e) {
+        for (i = 0; i < array.length; i++) {
+            if (array[i] == e){
+                return i;
+            }
+        }
+        return -1;
     }
 
 

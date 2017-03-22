@@ -16,7 +16,7 @@
 <header>
     <nav class="top-nav blue">
         <div class="container">
-            <div class="nav-wrapper"><a class="page-title">住宿登记</a></div>
+            <div class="nav-wrapper"><a class="page-title">登记和统计</a></div>
         </div>
     </nav>
     <%@ include file="../common/landlord-nav.jsp" %>

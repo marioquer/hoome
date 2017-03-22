@@ -17,7 +17,7 @@
 <header>
     <nav class="top-nav teal">
         <div class="container">
-            <div class="nav-wrapper"><a class="page-title">会员账户</a></div>
+            <div class="nav-wrapper"><a class="page-title">账户和统计</a></div>
         </div>
     </nav>
     <%@ include file="../common/user-nav.jsp" %>

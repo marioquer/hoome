@@ -56,5 +56,4 @@ public class BossController {
     public String pay(Long record_id) {
         return bossService.pay(record_id) ? "success" : "fail";
     }
-
 }

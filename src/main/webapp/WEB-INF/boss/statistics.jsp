@@ -24,13 +24,33 @@
 </header>
 
 <main>
-    <div class="container" style="background: red;height: 1000px;"></div>
-    <%@ include file="../common/footer.jsp" %>
+    <div class="container" style="min-height: 500px;"></div>
+    <%--<%@ include file="../common/footer.jsp" %>--%>
 </main>
 
 <!--  Scripts-->
 <script src="/js/jquery.min.js"></script>
 <script src="/js/materialize.js"></script>
 <script src="/js/init.js"></script>
+<script>
+    $.ajax({
+        method: "post",
+        url: "/boss/getStatistics",
+        async: false,
+        dataType: "json",
+        success: function (result) {
+
+            //all order record
+            for (var i = 0; i < result.length; i++) {
+            }
+
+        },
+        error: function () {
+            Materialize.toast('请求出错!', 1200);
+        }
+    });
+
+
+</script>
 </body>
 </html>
